@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -17,10 +18,11 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
+        Log::info("Attempting to login with credentials: " . json_encode($credentials));
         if (Auth::attempt($credentials)) {
             return redirect()->route('home');
         }
-
+        Log::warning("Login failed for email: " . $credentials['email']);
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
