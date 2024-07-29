@@ -1,3 +1,5 @@
+<!-- resources/views/companies/index.blade.php -->
+
 @extends('layouts.app')
 
 @section('content')
@@ -10,14 +12,9 @@
                 <th>ID</th>
                 <th>Company</th>
                 <th>Division</th>
-                <th>Phone</th>
                 <th>Segment</th>
-                <th>Sub Segment</th>
-                <th>Website</th>
-                <th>Social Media</th>
-                <th>Npwp</th>
-                <th>Post Code</th>
-                <th>Address</th>
+                <th>Sales PIC</th>
+                 <th>Created</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,17 +22,13 @@
             @foreach($companies as $company)
             <tr>
                 <td>{{ $company->id }}</td>
-                <td>{{ $company->company }}</td>
                 <td>{{ $company->division }}</td>
-                <td>{{ $company->phone }}</td>
-                <td>{{ $company->segment }}</td>
-                <td>{{ $company->sub_segment }}</td>
-                <td>{{ $company->website }}</td>
-                <td>{{ $company->social_media }}</td>
-                <td>{{ $company->npwp }}</td>
-                <td>{{ $company->post_code }}</td>
-                <td>{{ $company->address }}</td>
+                <td>{{ $company->segment}}</td>
+                <td>{{ $company->pic}}</td>
+                <td>{{ $company->created_at }}</td>
+                <td>{{ $company->company }}</td>
                 <td>
+                    <a href="{{ route('companies.show', $company->id) }}" class="btn btn-info">Details</a>
                     <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-primary">Edit</a>
                     <form action="{{ route('companies.destroy', $company->id) }}" method="POST" style="display:inline-block;">
                         @csrf
