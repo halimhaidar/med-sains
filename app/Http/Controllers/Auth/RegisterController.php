@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -46,7 +47,7 @@ class RegisterController extends Controller
             auth()->login($user);
             return redirect()->route('home')->with('success', 'Registration successful!');
         } catch (\Throwable $th) {
-            \Log::error('Registration error: ' . $th->getMessage());
+            Log::error('Registration error: ' . $th->getMessage());
             return redirect()->back()->with('error', 'Registration failed. Please try again.');
         }
     }
