@@ -6,19 +6,28 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Medisains') }}</title>
     <!-- Add CSS and other meta tags here -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
 
-<body>
+<body class="dark:bg-gray-900">
     <div id="app">
         <nav>
             <!-- Navigation links here -->
         </nav>
 
-        <main class="py-4">
+        <main class="">
             @yield('content')
         </main>
     </div>
@@ -29,13 +38,13 @@
         const password = document.querySelector('#password');
         const passwordConfirm = document.querySelector('#password_confirmation');
 
-        togglePassword1.addEventListener('click', function(e) {
+        togglePassword1 && togglePassword1.addEventListener('click', function(e) {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
             eyeIcon1.classList.toggle('fa-eye');
             eyeIcon1.classList.toggle('fa-eye-slash');
         });
-        togglePassword2.addEventListener('click', function(e) {
+        togglePassword2 && togglePassword2.addEventListener('click', function(e) {
             const type = passwordConfirm.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordConfirm.setAttribute('type', type);
             eyeIcon2.classList.toggle('fa-eye');

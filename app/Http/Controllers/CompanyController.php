@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,7 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $companies = Company::all();
+        $companies = Company::paginate(10);
         return view('companies.index', compact('companies'));
     }
 
@@ -59,7 +60,8 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = Company::findOrFail($id);
-        return view('companies.edit', compact('company'));
+        $users = User::all();
+        return view('companies.edit', compact('company', 'users'));
     }
 
     public function update(Request $request, $id)
