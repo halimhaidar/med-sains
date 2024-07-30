@@ -13,9 +13,21 @@ use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::paginate(10);
+        $search = $request->input('search');
+    
+        $query = Company::query();
+    
+        if ($search) {
+            $query->where('company', 'like', "%$search%")
+                  ->orWhere('pic', 'like', "%$search%")
+                  ->orWhere('segment', 'like', "%$search%")
+                  ->orWhere('division', 'like', "%$search%");
+        }
+    
+        $companies = $query->paginate(10);
+    
         return view('companies.index', compact('companies'));
     }
 
