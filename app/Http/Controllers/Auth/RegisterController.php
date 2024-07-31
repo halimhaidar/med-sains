@@ -21,9 +21,10 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'fullname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'role' => ['required', 'string', 'max:30'],
+            'username' => ['required', 'string', 'max:255', 'unique:users', 'regex:/^\S*$/u'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'username.regex' => 'The username cannot contain any whitespace (spasi).',
         ]);
     }
 
@@ -33,7 +34,7 @@ class RegisterController extends Controller
             'fullname' => $data['fullname'],
             'email' => $data['email'],
             'username' => $data['username'],
-            'role' => $data['role'],
+            'role' => 'staff',
             'password' => Hash::make($data['password']),
         ]);
     }

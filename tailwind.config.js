@@ -5,7 +5,7 @@ module.exports = {
     './resources/**/*.vue',
     './node_modules/flowbite/**/*.js'
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
@@ -20,9 +20,7 @@ module.exports = {
   '-apple-system', 
   'system-ui', 
   'Segoe UI', 
-  'Roboto', 
-  'Helvetica Neue', 
-  'Arial', 
+  'Roboto',  
   'Noto Sans', 
   'sans-serif', 
   'Apple Color Emoji', 
@@ -38,8 +36,6 @@ module.exports = {
   'system-ui', 
   'Segoe UI', 
   'Roboto', 
-  'Helvetica Neue', 
-  'Arial', 
   'Noto Sans', 
   'sans-serif', 
   'Apple Color Emoji', 

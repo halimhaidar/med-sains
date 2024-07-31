@@ -1,9 +1,10 @@
 <!-- resources/views/home.blade.php -->
 
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('content')
-    @auth
+    <h1 class="self-center text-base font-semibold whitespace-nowrap dark:text-white">WELCOME</h1>
+    {{-- @auth
         <h1>Welcome, {{ Auth::user()->fullname }}</h1>
         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             Logout
@@ -15,5 +16,5 @@
         <h1>You are not logged in.</h1>
         <a href="{{ route('login') }}">Login</a>
         <a href="{{ route('register') }}">Register</a>
-    @endauth
+    @endauth --}}
 @endsection

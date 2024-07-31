@@ -19,13 +19,16 @@ use App\Http\Controllers\CompanyController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
 });
 
 Route::get('/home', function () {
     return view('home');
 })->name('home')->middleware('auth');
 
+Route::get('/test-company',function () {
+    return view('testCompany.listTest');
+})->name('test')->middleware('auth');
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
