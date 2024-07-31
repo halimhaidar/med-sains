@@ -44,11 +44,12 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'company' => 'required|string|max:255',
+            'division' => 'required|string|max:255',
+            'segment' => 'required|string|max:255|in:hospital,industry,education',
+        ]);
         try {
-            $request->validate([
-                'company' => 'required|string|max:255',
-                'segment' => 'required|string|max:255|in:hospital,industry,education',
-            ]);
             $created_by = Auth::user()->fullname;
 
             Log::info("Authorize by: " . $created_by);
@@ -60,13 +61,13 @@ class CompanyController extends Controller
             Log::info('Company data:', $data);
 
             Company::create($data);
+            return redirect()->route('companies.index')
+                ->with('success', 'Company created successfully.');
         } catch (\Throwable $th) {
             log::info('Create Company error with:' . $th);
+            return redirect()->route('companies.index')
+            ->with('error', 'An error occurred while creating the company.');
         }
-
-
-        return redirect()->route('companies.index')
-            ->with('success', 'Company created successfully.');
     }
 
     public function edit($id)

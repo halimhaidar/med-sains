@@ -7,11 +7,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Medisains') }}</title>
-    <!-- Add CSS and other meta tags here -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script>
-        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -142,7 +140,7 @@
                     </li>
                     <li>
                         <a href="{{ route('companies.index') }}"
-                            class="flex items-center p-2 text-gray-900 rounded-lg dark:{{ Request::is('companies') ? 'text-blue-500' : 'text-white' }} hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            class="flex items-center p-2  rounded-lg {{ Request::is('companies') ? 'text-blue-500' : 'text-gray-900' }} dark:{{ Request::is('companies') ? 'text-blue-500' : 'text-white' }} hover:bg-gray-100 dark:hover:bg-gray-700 group">
                             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                 viewBox="0 0 18 18">
@@ -233,6 +231,7 @@
     </div>
     <script src="{{ mix('js/app.js') }}"></script>
     <script>
+        // Scripts Toogle Password Start
         const togglePassword1 = document.querySelector('#togglePassword1');
         const togglePassword2 = document.querySelector('#togglePassword2');
         const password = document.querySelector('#password');
@@ -252,6 +251,9 @@
                 eyeIcon2.classList.toggle('fa-eye-slash');
             });
         }
+        // Scripts Toogle Password End
+
+        // Scripts Toogle Dark Mode Start
         var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
         var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
@@ -292,11 +294,19 @@
             }
 
         });
+        // Scripts Toogle Dark Mode End
 
-
+        // Scripts disable sub-segment start
         document.addEventListener('DOMContentLoaded', function() {
             const segmentSelect = document.getElementById('segment');
             const subSegmentInput = document.getElementById('sub_segment');
+            if (segmentSelect) {
+                if (segmentSelect.value === 'industry') {
+                    subSegmentInput && subSegmentInput.removeAttribute('disabled');
+                } else {
+                    subSegmentInput && subSegmentInput.setAttribute('disabled', 'disabled');
+                }
+            }
             segmentSelect && segmentSelect.addEventListener('change', function() {
                 if (segmentSelect.value === 'industry') {
                     subSegmentInput && subSegmentInput.removeAttribute('disabled');
@@ -305,6 +315,33 @@
                 }
             });
         });
+        // Scripts disable sub-segment End
+
+        // Scripts Success Message Start
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.style.transition = 'opacity 0.5s ease-out';
+                    successMessage.style.opacity = '0';
+                    setTimeout(() => successMessage.remove(), 500);
+                }, 3000);
+            }
+        });
+        // Scripts Success Message End
+
+        // Scripts Error Message Start
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorMessage = document.getElementById('errorMessage');
+            if (errorMessage) {
+                setTimeout(() => {
+                    errorMessage.style.transition = 'opacity 0.5s ease-out';
+                    errorMessage.style.opacity = '0';
+                    setTimeout(() => errorMessage.remove(), 500);
+                }, 5000);
+            }
+        });
+        // Scripts Error Message End
     </script>
 </body>
 
