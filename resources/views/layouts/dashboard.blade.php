@@ -298,20 +298,33 @@
 
         // Scripts disable sub-segment start
         document.addEventListener('DOMContentLoaded', function() {
-            const segmentSelect = document.getElementById('segment');
-            const subSegmentInput = document.getElementById('sub_segment');
+            let segmentSelect = document.getElementById('segment');
+            let subSegmentInput = document.getElementById('sub_segment');
+            let subSegmentInputHidden = document.getElementById('sub_segment_hidden');
             if (segmentSelect) {
                 if (segmentSelect.value === 'industry') {
                     subSegmentInput && subSegmentInput.removeAttribute('disabled');
+                    subSegmentInputHidden && subSegmentInputHidden.setAttribute('disabled', 'disabled');
+                    subSegmentInput && (subSegmentInput.options[4].setAttribute('hidden', 'hidden'))
                 } else {
+                    subSegmentInput && subSegmentInput.removeAttribute('hidden');
+                    subSegmentInputHidden && subSegmentInputHidden.removeAttribute('disabled')
                     subSegmentInput && subSegmentInput.setAttribute('disabled', 'disabled');
+                    subSegmentInput && (subSegmentInput.options[4].selected = true)
+                    // subSegmentInputHidden && (subSegmentInputHidden.value = "")
                 }
             }
             segmentSelect && segmentSelect.addEventListener('change', function() {
                 if (segmentSelect.value === 'industry') {
                     subSegmentInput && subSegmentInput.removeAttribute('disabled');
+                    subSegmentInputHidden && subSegmentInputHidden.setAttribute('disabled', 'disabled');
+                    subSegmentInput && (subSegmentInput.options[4].setAttribute('hidden', 'hidden'))
                 } else {
+                    subSegmentInput && subSegmentInput.removeAttribute('hidden');
+                    subSegmentInputHidden && subSegmentInputHidden.removeAttribute('disabled')
                     subSegmentInput && subSegmentInput.setAttribute('disabled', 'disabled');
+                    subSegmentInput && (subSegmentInput.options[4].selected = true);
+                    // subSegmentInputHidden && (subSegmentInputHidden.value = "")
                 }
             });
         });
