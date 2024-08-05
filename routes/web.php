@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +45,5 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 
 
 Route::resource('companies', CompanyController::class)->middleware('auth');
+
+Route::resource('contacts', ContactController::class)->middleware('auth');
