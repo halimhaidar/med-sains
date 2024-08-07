@@ -1,16 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h2>Edit Contact</h2>
-        </div>
-    </div>
-
+    <p class="text-xl font-semibold text-gray-900 dark:text-white">Edit contact</p>
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+        <div id="errorMessage" class="top-4 right-4 mb-5 mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -18,113 +11,153 @@
             </ul>
         </div>
     @endif
-
-    <form action="{{ route('contacts.update', $contact->id) }}" method="POST">
+    <form class="p-4 md:p-5" action="{{ route('contacts.update', $contact->id) }}" method="POST">
         @csrf
         @method('PUT')
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Salutation:</strong>
-                    <input type="text" name="salutation" class="form-control" placeholder="Salutation" value="{{ $contact->salutation }}">
-                </div>
+        <div class="grid gap-4 mb-4 grid-cols-4">
+            <div class="col-span-2">
+                <label for="salutation"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salutation</label>
+                <input type="text" name="salutation" id="salutation" value="{{ $contact->salutation }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Name:</strong>
-                    <input type="text" name="name" class="form-control" placeholder="Name" value="{{ $contact->name }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <input type="text" name="name" id="name" value="{{ $contact->name }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Academic Degree:</strong>
-                    <input type="text" name="academic_degree" class="form-control" placeholder="Academic Degree"value="{{ $contact->academic_degree }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="academic_degree" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Academic
+                    Degree</label>
+                <input type="text" name="academic_degree" id="academic_degree" value="{{ $contact->academic_degree }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Job Title:</strong>
-                    <input type="text" name="job_title" class="form-control" placeholder="Job Title"value="{{ $contact->job_title }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="job_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job
+                    Title</label>
+                <input type="text" name="job_title" id="job_title" value="{{ $contact->job_title }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Gender:</strong>
-                    <input type="text" name="gender" class="form-control" placeholder="Gender" value="{{ $contact->gender }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+                <input type="text" name="gender" id="gender" value="{{ $contact->gender }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Company:</strong>
-                    <select name="company_id" class="form-control">
-                        <option selected value="{{ $contact->company_id }}">{{ $contact->company }}</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->company }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="col-span-2 ">
+                <label for="company_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
+                <select id="company_id" name="company_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <option disabled>Select Company</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}" {{ $company->id == $contact->company_id ? 'selected' : '' }}>
+                            {{ $company->company }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-          
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Email:</strong>
-                    <input type="email" name="email" class="form-control" placeholder="Email" value="{{ $contact->email }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                <input type="email" name="email" id="email" value="{{ $contact->email }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Phone:</strong>
-                    <input type="text" name="phone" class="form-control" placeholder="Phone" value="{{ $contact->phone }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
+                <input type="text" name="phone" id="phone" value="{{ $contact->phone }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Segment:</strong>
-                    <input type="text" name="segment" class="form-control" placeholder="Segment" value="{{ $contact->segment }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province</label>
+                <input type="text" name="province" id="province" value="{{ $contact->province }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Sub Segment:</strong>
-                    <input type="text" name="sub_segment" class="form-control" placeholder="Sub Segment" value="{{ $contact->sub_segment }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                <input type="text" name="city" id="city" value="{{ $contact->city }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Province:</strong>
-                    <input type="text" name="province" class="form-control" placeholder="Province" value="{{ $contact->province }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="post_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post
+                    Code</label>
+                <input type="text" name="post_code" id="post_code" value="{{ $contact->post_code }}"
+                    class="bg-gray-50 border border-gray-300
+                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
+                    dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    required>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>City:</strong>
-                    <input type="text" name="city" class="form-control" placeholder="City" value="{{ $contact->city }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="segment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Segment</label>
+                <select id="segment" name="segment" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <option disabled>Select Segment</option>
+                    <option value="hospital" {{ $contact->segment == 'hospital' ? 'selected' : '' }}>Hospital</option>
+                    <option value="industry" {{ $contact->segment == 'industry' ? 'selected' : '' }}>Industry</option>
+                    <option value="education" {{ $contact->segment == 'education' ? 'selected' : '' }}>Education
+                    </option>
+                </select>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Address:</strong>
-                    <input type="text" name="address" class="form-control" placeholder="Address" value="{{ $contact->address }}">
-                </div>
+            <div class="col-span-2 ">
+                <label for="sub_segment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sub
+                    Segment</label>
+                <select id="sub_segment" name="sub_segment" disabled
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <option value="" selected disabled>Select Sub-Segment</option>
+                    <option value="farmasi" {{ $contact->sub_segment == 'farmasi' ? 'selected' : '' }}>Farmasi</option>
+                    <option value="chemical" {{ $contact->sub_segment == 'chemical' ? 'selected' : '' }}>Chemical
+                    </option>
+                    <option value="biological" {{ $contact->sub_segment == 'biological' ? 'selected' : '' }}>Biological
+                    </option>
+                    <option value="">Select Sub-Segment</option>
+                </select>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Post Code:</strong>
-                    <input type="text" name="post_code" class="form-control" placeholder="Post Code" value="{{ $contact->post_code }}">
-                </div>
+            <input type="hidden" name="sub_segment" id="sub_segment_hidden" value="">
+            <div class="col-span-2">
+                <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address</label>
+                <textarea id="address" name="address" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50
+                    rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500
+                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $contact->address }}</textarea>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>PIC:</strong>
-                    <input type="text" name="pic" class="form-control" placeholder="PIC" value="{{ $contact->pic }}">
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-
-            </div>
-    </form>
-</div>
+        </div>
+        <div class="w-full flex justify-end"> <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Edit Contact
+            </button></div>
+    </form>>
 @endsection
