@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ContactController extends Controller
 {
@@ -23,14 +24,13 @@ class ContactController extends Controller
         if ($search) {
             $query->where('name', 'like', "%$search%")
                 ->orwhere('company', 'like', "%$search%")
-                ->orWhere('pic', 'like', "%$search%")
                 ->orWhere('segment', 'like', "%$search%")
-                ->orWhere('division', 'like', "%$search%");
+                ->orWhere('pic', 'like', "%$search%");
         }
-
+        $companies = Company::all();
         $contacts = $query->paginate(10);
 
-        return view('contacts.index', compact('contacts'));
+        return view('contacts.index', compact('contacts', 'companies'));
     }
 
     /**
@@ -115,16 +115,20 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $contact = Contact::findOrFail($id);
         $request->validate([
             'name' => 'required|string|max:50',
-            'email' => 'required|email|unique:contacts,email',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('contacts')->ignore($contact->id),
+            ],
             'phone' => 'required|max:20',
             'gender' => 'required|string|max:10',
             'company_id'=> 'required|string|max:10',
             'segment'=>'required|string|max:50'
         ]);
 
-        $contact = Contact::findOrFail($id);
         $data = $request->all();
 
         if ($request->company_id != $contact->company_id) {

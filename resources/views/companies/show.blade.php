@@ -10,19 +10,61 @@
             <div class="p-6">
                 <div class="flex items-center">
                     <div id="avatar"
-                        class="flex items-center justify-center w-16 h-16 bg-blue-500 text-white text-2xl font-bold rounded-lg">
+                        class="flex items-center justify-center w-32 h-32 bg-blue-500 text-white text-2xl font-bold rounded-lg">
                     </div>
                     <div class="ml-4">
                         <h2 class="text-gray-800 dark:text-gray-300 font-bold text-xl">{{ $company->company }}</h2>
                     </div>
                 </div>
             </div>
-            <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+            {{-- <div class="p-6 border-t border-gray-200 dark:border-gray-700">
                 <h3 class="text-gray-800 dark:text-gray-300 font-bold">Sales Creator: {{ $company->created_by }}</h3>
                 <p class="text-gray-600 dark:text-gray-500">Sales PIC: {{ $company->pic }}</p>
                 <p class="text-gray-600 dark:text-gray-500">Created: {{ $company->created_at }}</p>
                 <p class="text-gray-600 dark:text-gray-500">Phone: {{ $company->phone }}</p>
                 <p class="text-gray-600 dark:text-gray-500">Address: {{ $company->address }}</p>
+            </div> --}}
+            <div class="grid grid-cols-4 gap-2 p-6">
+                <div class="ttext-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Creator:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->created_by ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Sales PIC:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->pic ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Created:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->created_at ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Division:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->division ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Phone:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->phone ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Website:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->website ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">NPWP:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3">{{ $company->npwp ?? '-' }}</div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Address:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3 break-words">
+                    {{ $company->address ?? '-' }}
+                </div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Segment:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3 break-words">
+                    {{ $company->segment ?? '-' }}
+                </div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Sub-Segment:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3 break-words">
+                    {{ $company->sub_segment ?? '-' }}
+                </div>
+
+                <div class="text-gray-600 dark:text-gray-500 text-left font-bold col-span-1">Post Code:</div>
+                <div class="text-gray-600 dark:text-gray-500 text-right col-span-3 break-words">
+                    {{ $company->post_code ?? '-' }}
+                </div>
             </div>
             <div class="p-6 border-t border-gray-200 dark:border-gray-700">
                 {{-- <ul>
