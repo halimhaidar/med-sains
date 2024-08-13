@@ -14,8 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
-        return view('category.index', compact('category'));
+        $categories = Category::paginate(10);
+        // dd($category);
+        return view('category.index', compact('categories'));
     }
 
     /**
@@ -80,14 +81,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $category = Category::findOrFail($id);
         $request->validate([
             'name' => 'required',
         ]);
 
-        $category = new Category($request->all());
-
-
-        $category->save();
+        $category->update($request->all());
 
         return redirect()->route('category.index')
             ->with('success', 'Category update successfully.');
