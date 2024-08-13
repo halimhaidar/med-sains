@@ -8,7 +8,15 @@
             <a class="btn btn-success mb-3" href="{{ route('brands.create') }}">Create New Brand</a>
         </div>
     </div>
-
+    <form  method="GET" action="{{ route('brands.index') }}">
+            <label for="search" >Search</label>
+            <div class="relative">
+                
+                <input type="search" id="search" name="search" value="{{ request('search') }}"
+                    placeholder="Search" />
+                <button type="submit">Search</button>
+            </div>
+        </form>
     <table class="table table-bordered">
         <thead>
             <tr>

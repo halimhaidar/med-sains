@@ -13,9 +13,15 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $brands = Brands::all();
+        $search = $request->input('search');
+        $query = Brands::query();
+        if ($search) {
+            $query->where('created_at', 'like', "%$search%");
+        }
+        $brands = $query->paginate(10);
+
         return view('brands.index', compact('brands'));
     }
 
