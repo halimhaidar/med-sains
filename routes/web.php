@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
@@ -50,4 +51,7 @@ Route::resource('companies', CompanyController::class)->middleware('auth');
 Route::resource('contacts', ContactController::class)->middleware('auth');
 
 Route::resource('brands', BrandController::class)->middleware('auth');
-Route::put('brands/{brand}/update-target', [BrandController::class, 'updateTarget'])->name('brands.update-target');
+Route::put('brands/{brand}/update-target', [BrandController::class, 'updateTarget'])->name('brands.update-target')->middleware('auth');
+
+Route::resource('category', CategoryController::class)->middleware('auth');
+
