@@ -36,9 +36,12 @@
         </div>
 
         <div class="form-group">
-            <label for="group">Ketegori:</label>
+            <strong>category:</strong>
             <select name="category_id" class="form-control">
-                <option value="General" {{ $brand->group == 'General' ? 'selected' : '' }}>General</option>
+                <option value="{{$brand->category_id}}">{{$brand->category_name}}</option>
+                @foreach ($category as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
             </select>
         </div>
 
@@ -52,7 +55,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Description:</strong>
-                <textarea name="description" class="form-control" rows="5"></textarea>
+                <textarea name="description" class="form-control" rows="5">{{$brand->description}}</textarea>
             </div>
         </div>
 

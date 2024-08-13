@@ -17,7 +17,7 @@
                 <th>SQ Target</th>
                 <th>SO Target</th>
                 <th>Sales Target</th>
-                <th>Group</th>
+                <th>Category</th>
                 <th>Created</th>
                 <th>Handle By</th>
                 <th>Action</th>
@@ -35,14 +35,13 @@
                         </div>
                         <div class="ml-2">
                             <strong>{{ $brand->name }}</strong><br>
-                            <small>Priority:</small>
                         </div>
                     </div>
                 </td>
                 <td>Rp. {{ number_format($brand->sq_target, 0, ',', '.') }}</td>
                 <td>Rp. {{ number_format($brand->so_target, 0, ',', '.') }}</td>
                 <td>Rp. {{ number_format($brand->sales_target, 0, ',', '.') }}</td>
-                <td>{{ $brand->group }}</td>
+                <td>{{ $brand->category_name }}</td>
                 <td>{{ $brand->created_at->format('d F Y') }}</td>
                 <td>{{ $brand->handle_by }}</td>
                 <td>

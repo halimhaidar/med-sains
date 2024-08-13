@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brands;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -25,7 +26,8 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('brands.create');
+        $category = Category::all();
+        return view('brands.create', compact('category'));
     }
 
     /**
@@ -43,14 +45,14 @@ class BrandController extends Controller
             'description' => 'nullable',
         ]);
 
+        $category = Category::findOrFail($request->category_id);
         $brand = new Brands($request->all());
-
+        $brand->category_name = $category->name;
         if ($request->hasFile('image_brand')) {
             $file = $request->file('image_brand');
             $imageBase64 = base64_encode(file_get_contents($file->getRealPath()));
             $brand->image_brand = $imageBase64;
         }
-
 
         $brand->save();
 
@@ -69,7 +71,9 @@ class BrandController extends Controller
         $imageSrc = 'data:image/jpeg;base64,' . $brand->image_brand;
 
         $brand->image_brand = $imageSrc;
-        return view('brands.show', compact('brand'));
+
+        $category = Category::all();
+        return view('brands.show', compact('brand','category'));
     }
 
     /**
@@ -103,7 +107,8 @@ class BrandController extends Controller
         ]);
 
         $brand->fill($request->all());
-
+        $category = Category::findOrFail($request->category_id);
+        $brand->category_name = $category->name;
         if ($request->hasFile('image_brand')) {
             $file = $request->file('image_brand');
             $imageBase64 = base64_encode(file_get_contents($file->getRealPath()));
@@ -125,7 +130,7 @@ class BrandController extends Controller
         ]);
 
         $brand->fill($request->all());
-       
+
         $brand->save();
 
         return redirect()->route('brands.index')

@@ -19,13 +19,13 @@ class CreateBrandsTable extends Migration
             $table->string('handle_by');
             $table->string('category_id')->nullable();
             $table->string('category_name')->nullable();
-            $table->text('image_brand')->nullable();
+            $table->mediumText('image_brand')->nullable();
             $table->text('description')->nullable();
             $table->string('vendor_id')->nullable();
             $table->string('vendor_name')->nullable();
-            $table->decimal('sq_target', 15, 2)->default(0);
-            $table->decimal('so_target', 15, 2)->default(0);
-            $table->decimal('sales_target', 15, 2)->default(0);
+            $table->integer('sq_target')->default(0);
+            $table->integer('so_target')->default(0);
+            $table->integer('sales_target')->default(0);
             $table->timestamps();
         });
     }

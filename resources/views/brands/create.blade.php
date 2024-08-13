@@ -35,17 +35,17 @@
                     <input type="text" name="handle_by" class="form-control" placeholder="Enter Handle By">
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <div class="form-group">
-                    <strong>Group:</strong>
-                    <select name="group" class="form-control">
-                        <option value="">Select Brand Group</option>
-                        <option value="Group 1">Group 1</option>
-                        <option value="Group 2">Group 2</option>
-                        <!-- Add your options here -->
-                    </select>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>category:</strong>
+                        <select name="category_id" class="form-control">
+                            <option value="">Select category</option>
+                            @foreach ($category as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
             <div class="col-xs-12 col-sm-12 col-md-6">
                 <div class="form-group">
                     <strong>Image of Brand:</strong>
