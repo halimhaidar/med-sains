@@ -73,7 +73,7 @@
                     <th scope="col" class="px-6 py-3">
                         Created
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 min-w-[300px]">
                         Action
                     </th>
                 </tr>

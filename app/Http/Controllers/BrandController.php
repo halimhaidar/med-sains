@@ -18,11 +18,13 @@ class BrandController extends Controller
         $search = $request->input('search');
         $query = Brands::query();
         if ($search) {
-            $query->where('created_at', 'like', "%$search%");
+            $query->where('name', 'like', "%$search%")
+                  ->orWhere('handle_by', 'like', "%$search%");
         }
         $brands = $query->paginate(10);
+        $categories = Category::all();
 
-        return view('brands.index', compact('brands'));
+        return view('brands.index', compact('brands', 'categories'));
     }
 
     /**
@@ -32,8 +34,8 @@ class BrandController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
-        return view('brands.create', compact('category'));
+        $categories = Category::all();
+        return view('brands.create', compact('categories'));
     }
 
     /**
@@ -43,11 +45,11 @@ class BrandController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'name' => 'required',
             'handle_by' => 'required',
-            'image_brand' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_brand' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable',
         ]);
 
@@ -77,9 +79,8 @@ class BrandController extends Controller
         $imageSrc = 'data:image/jpeg;base64,' . $brand->image_brand;
 
         $brand->image_brand = $imageSrc;
-
-        $category = Category::all();
-        return view('brands.show', compact('brand','category'));
+        $categories = Category::all();
+        return view('brands.show', compact('brand','categories'));
     }
 
     /**

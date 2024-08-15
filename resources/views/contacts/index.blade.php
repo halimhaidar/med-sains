@@ -75,7 +75,7 @@
                     <th scope="col" class="px-6 py-3">
                         Created
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 min-w-[300px]">
                         Action
                     </th>
                 </tr>
@@ -271,9 +271,12 @@
                         <div class="col-span-2 ">
                             <label for="gender"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
-                            <input type="text" name="gender" id="gender"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
+                            <select id="gender" name="gender" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected disabled>Select Gender</option>
+                                <option value="Pria">Pria</option>
+                                <option value="Wanita">Wanita</option>
+                            </select>
                         </div>
                         <div class="col-span-2 ">
                             <label for="company_id"
