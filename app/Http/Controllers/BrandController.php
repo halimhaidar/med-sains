@@ -152,14 +152,6 @@ class BrandController extends Controller
      */
     public function destroy(Brands $brand)
     {
-        if ($brand->image && file_exists(public_path('images') . '/' . $brand->image)) {
-            unlink(public_path('images') . '/' . $brand->image);
-        }
-
-        if ($brand->brochure && file_exists(public_path('brochures') . '/' . $brand->brochure)) {
-            unlink(public_path('brochures') . '/' . $brand->brochure);
-        }
-
         $brand->delete();
 
         return redirect()->route('brands.index')
