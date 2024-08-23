@@ -96,7 +96,7 @@
                         {{ $company->pic }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $company->created_at }}
+                        {{ $company->created_at->translatedFormat('d F Y') }}
                     </td>
                     <td>
                         <a href="{{ route('companies.show', $company->id) }}"

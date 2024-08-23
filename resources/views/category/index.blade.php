@@ -58,7 +58,7 @@
                         {{ $category->name }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $category->created_at }}
+                        {{ $category->created_at->translatedFormat('d F Y') }}
                     </td>
                     <td>
                         @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin')

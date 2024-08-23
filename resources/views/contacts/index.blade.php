@@ -95,7 +95,7 @@
                         {{ $contact->phone }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $contact->created_at }}
+                        {{ $contact->created_at->translatedFormat('d F Y') }}
                     </td>
                     <td>
                         <a href="{{ route('contacts.show', $contact->id) }}"

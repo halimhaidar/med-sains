@@ -110,7 +110,7 @@
                         {{ $brand->category_name }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $brand->created_at->format('d F Y') }}
+                        {{ $brand->created_at->translatedFormat('d F Y') }}
                     </td>
                     <td class="px-6 py-4">
                         {{ $brand->handle_by }}
