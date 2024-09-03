@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProductController;
 
 /*
@@ -57,5 +58,8 @@ Route::put('brands/{brand}/update-target', [BrandController::class, 'updateTarge
 Route::resource('category', CategoryController::class)->middleware('auth');
 
 Route::resource('products', ProductController::class)->middleware('auth');
+
+Route::resource('leads', LeadController::class)->middleware('auth');
+
 
 
