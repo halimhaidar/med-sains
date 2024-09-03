@@ -124,7 +124,6 @@ class ProductController extends Controller
 
         if ($request->attachment != null) {
             if ($request->attachment != $product->attachment) {
-                dd($request->attachment);
 
                 $customPath = 'uploads/files/';
 

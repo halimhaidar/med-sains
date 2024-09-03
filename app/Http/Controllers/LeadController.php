@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,21 +18,21 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-    
+
         $query = Lead::query();
-    
+
         if ($search) {
             $query->where('contact_name', 'like', "%$search%")
-            ->where('contact_phone', 'like', "%$search%")
-            ->where('contact_company', 'like', "%$search%")
-            ->where('contact_company', 'like', "%$search%")
-            ->where('source', 'like', "%$search%")
-            ->where('status', 'like', "%$search%");
+                ->where('contact_phone', 'like', "%$search%")
+                ->where('contact_company', 'like', "%$search%")
+                ->where('contact_company', 'like', "%$search%")
+                ->where('source', 'like', "%$search%")
+                ->where('status', 'like', "%$search%");
         }
-    
+
         $leads = $query->paginate(10);
-       
-        
+
+
         return view('leads.index', compact('leads'));
     }
 
@@ -44,14 +45,15 @@ class LeadController extends Controller
     {
         $contactsAll = Contact::all();
 
-        
+
 
         $contact_id = $request->input('contact_id');
-        if ($contact_id) {
-        }
+
         $contact = Contact::find($contact_id);
+
         $user = Auth::user();
-        if ($user->role == 'Admin') {
+        if ($user->role == 'admin') {
+            $user = User::all();
         }
         return view('leads.create', compact('contactsAll', 'contact', 'user'));
     }
@@ -75,10 +77,10 @@ class LeadController extends Controller
             $data['contact_phone'] = $contact->phone;
             $data['contact_company'] = $contact->company;
             $data['contact_email'] = $contact->email;
-          
+
             Lead::create($data);
         } catch (\Throwable $th) {
-            
+
             return redirect()->route('leads.index')
                 ->with('error', 'An error occurred while creating the lead.');
         }
@@ -105,10 +107,27 @@ class LeadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Lead $lead, Request $request)
     {
-        //
+        $contactsAll = Contact::all();
+
+
+        if ($request->contact_id) {
+            $contact_id = $request->input('contact_id');
+        } else {
+            $contact_id = $lead->contact_id;
+        }
+
+        if ($contact_id) {
+            $contact = Contact::find($contact_id);
+        }
+        $user = Auth::user();
+        if ($user->role == 'admin') {
+            $user = User::all();
+        }
+        return view('leads.edit', compact('contactsAll', 'contact', 'lead', 'user'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -117,9 +136,33 @@ class LeadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Lead $lead)
     {
-        //
+
+        try {
+            $request->validate([
+                'contact_id' => 'required|string|max:50',
+            ]);
+            $contact = Contact::findOrFail($request->contact_id);
+
+            $lead->fill($request->all());
+            
+
+            $lead->contact_name = $contact->name;
+            $lead->contact_phone = $contact->phone;
+            $lead->contact_company = $contact->company;
+            $lead->contact_email = $contact->email;
+
+            $lead->save();
+        } catch (\Throwable $th) {
+            
+            return redirect()->route('leads.index')
+                ->with('error', 'An error occurred while creating the lead.');
+        }
+
+
+        return redirect()->route('leads.index')
+            ->with('success', 'Lead update successfully.');
     }
 
     /**
@@ -130,8 +173,8 @@ class LeadController extends Controller
      */
     public function destroy($id)
     {
-        $lead= Lead::findOrFail($id);
-      
+        $lead = Lead::findOrFail($id);
+
         $lead->delete();
 
         return redirect()->route('leads.index')
