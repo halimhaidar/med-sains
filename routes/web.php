@@ -11,6 +11,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,11 @@ Route::resource('category', CategoryController::class)->middleware('auth');
 Route::resource('products', ProductController::class)->middleware('auth');
 
 Route::resource('leads', LeadController::class)->middleware('auth');
+
+Route::resource('quotations', QuotationController::class)->middleware('auth');
+Route::post('quotations/addAddress', [QuotationController::class, 'addNewAddress'])->name('quotations.addAddress')->middleware('auth');
+
+
 
 
 
