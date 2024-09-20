@@ -37,25 +37,25 @@
         @csrf
         <div class="form-group">
             <label for="contact_id">Contact ID:</label>
-            <input type="text" name="contact_id" class="form-control" value="{{ isset($contact)?$contact->id:''}}" disabled>
+            <input type="text" name="contact_id" class="form-control" value="{{ isset($contact)?$contact->id:''}}" readonly>
         </div>
 
         <div class="form-group">
             <label for="contact_name">Contact Name:</label>
-            <input type="text" name="contact_name" class="form-control" value="{{ isset($contact)?$contact->name:'' }}"disabled>
+            <input type="text" name="contact_name" class="form-control" value="{{ isset($contact)?$contact->name:'' }}"readonly>
         </div>
 
         <div class="form-group">
             <label for="contact_phone">Contact Phone:</label>
-            <input type="text" name="contact_phone" class="form-control" value="{{ isset($contact)?$contact->phone:''}}"disabled>
+            <input type="text" name="contact_phone" class="form-control" value="{{ isset($contact)?$contact->phone:''}}"readonly>
         </div>
         <div class="form-group">
             <label for="contact_company">Contact Eompany:</label>
-            <input type="text" name="contact_company" class="form-control" value="{{ isset($contact)?$contact->company:''}}"disabled>
+            <input type="text" name="contact_company" class="form-control" value="{{ isset($contact)?$contact->company:''}}"readonly>
         </div>
         <div class="form-group">
             <label for="contact_email">Contact Email:</label>
-            <input type="text" name="contact_email" class="form-control" value="{{ isset($contact)?$contact->email:''}}" disabled>
+            <input type="text" name="contact_email" class="form-control" value="{{ isset($contact)?$contact->email:''}}" readonly>
         </div>
         <div class="form-group">
             <label for="source">Lead Source:</label>
@@ -85,8 +85,10 @@
         <div class="form-group">
             <label for="assign_to">Assign To drop:</label>
             <select class="form-control" id="assign_to" name="assign_to" >
+            <option value="" disabled selected>Choose </option>
                 @foreach($user as $item)
-                <option value="{{ $item->id }}" {{ (isset($user) && $item->id == $item->id) ? 'selected' : '' }}>
+                
+                <option value="{{ $item->id }}">
                     {{ $item->fullname }}
                 </option>
                 @endforeach

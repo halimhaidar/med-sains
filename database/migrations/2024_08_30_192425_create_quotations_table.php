@@ -23,9 +23,9 @@ class CreateQuotationsTable extends Migration
             $table->string('description')->nullable();
             $table->string('franco')->nullable();
             $table->integer('validity')->default(0);
-            $table->string('delivery_estimation')->nullable();
+            $table->date('delivery_estimation')->nullable();
             $table->string('delivery_condition')->nullable();
-            $table->integer('term_of_payment')->default(0);
+            $table->string('term_of_payment')->nullable();
             $table->string('sales_id')->nullable();
             $table->string('sales_signature')->nullable();
             $table->integer('pdf_show')->default(0);

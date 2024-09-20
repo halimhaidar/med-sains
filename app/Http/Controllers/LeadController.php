@@ -7,6 +7,7 @@ use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LeadController extends Controller
 {
@@ -19,7 +20,10 @@ class LeadController extends Controller
     {
         $search = $request->input('search');
 
-        $query = Lead::query();
+        $query = DB::table('med_sains.leads as a')
+            ->join('users as b', 'b.id', '=', 'a.assign_to')
+            ->select('a.*', 'b.fullname');
+
 
         if ($search) {
             $query->where('contact_name', 'like', "%$search%")
@@ -45,8 +49,6 @@ class LeadController extends Controller
     {
         $contactsAll = Contact::all();
 
-
-
         $contact_id = $request->input('contact_id');
 
         $contact = Contact::find($contact_id);
@@ -66,6 +68,7 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
+        $data = [];
         try {
 
             $request->validate([
@@ -84,7 +87,6 @@ class LeadController extends Controller
             return redirect()->route('leads.index')
                 ->with('error', 'An error occurred while creating the lead.');
         }
-
 
         return redirect()->route('leads.index')
             ->with('success', 'Lead created successfully.');
@@ -146,7 +148,7 @@ class LeadController extends Controller
             $contact = Contact::findOrFail($request->contact_id);
 
             $lead->fill($request->all());
-            
+
 
             $lead->contact_name = $contact->name;
             $lead->contact_phone = $contact->phone;
@@ -155,7 +157,7 @@ class LeadController extends Controller
 
             $lead->save();
         } catch (\Throwable $th) {
-            
+
             return redirect()->route('leads.index')
                 ->with('error', 'An error occurred while creating the lead.');
         }

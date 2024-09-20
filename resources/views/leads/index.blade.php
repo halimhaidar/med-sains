@@ -41,7 +41,7 @@
                 <td>{{ $lead->source }}</td>
                 <td>{{ $lead->segment }}</td>
                 <td>{{ ucfirst($lead->status) }}</td>
-                <td>{{ $lead->assign_to }}</td>
+                <td>{{ $lead->fullname }}</td>
                 <td>
                     <a class="btn btn-info btn-sm" href="{{ route('leads.show', $lead->id) }}">Show</a>
                     <a class="btn btn-primary btn-sm" href="{{ route('leads.edit', $lead->id) }}">Edit</a>

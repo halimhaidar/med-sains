@@ -64,6 +64,7 @@ Route::resource('leads', LeadController::class)->middleware('auth');
 
 Route::resource('quotations', QuotationController::class)->middleware('auth');
 Route::post('quotations/addAddress', [QuotationController::class, 'addNewAddress'])->name('quotations.addAddress')->middleware('auth');
+Route::post('quotations/lead', [QuotationController::class, 'searchLead'])->name('quotations.searchLead')->middleware('auth');
 
 
 
