@@ -21,6 +21,7 @@ class CreateContactAddressesTable extends Migration
             $table->string('city');
             $table->integer('post_code');
             $table->string('address');
+            $table->boolean('default')->default(0);
             $table->timestamps();
         });
     }

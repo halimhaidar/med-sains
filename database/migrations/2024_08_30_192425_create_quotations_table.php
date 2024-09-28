@@ -14,7 +14,7 @@ class CreateQuotationsTable extends Migration
     public function up()
     {
         Schema::create('quotations', function (Blueprint $table) {
-            $table->string('id');
+            $table->string('id')->primary();
             $table->string('lead_id');
             $table->string('contact_address_id')->nullable();
             $table->string('category')->nullable();
@@ -22,7 +22,7 @@ class CreateQuotationsTable extends Migration
             $table->string('source')->nullable();
             $table->string('description')->nullable();
             $table->string('franco')->nullable();
-            $table->integer('validity')->default(0);
+            $table->string('validity')->nullable();
             $table->date('delivery_estimation')->nullable();
             $table->string('delivery_condition')->nullable();
             $table->string('term_of_payment')->nullable();

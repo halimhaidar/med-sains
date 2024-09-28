@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\contact_address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -59,8 +60,8 @@ class ContactController extends Controller
                 'email' => 'required|email|unique:contacts,email',
                 'phone' => 'required|max:20',
                 'gender' => 'required|string|max:10',
-                'company_id'=> 'required|string|max:10',
-                'segment'=>'required|string|max:50'
+                'company_id' => 'required|string|max:10',
+                'segment' => 'required|string|max:50'
             ]);
             $created_by = Auth::user()->fullname;
             $company = Company::findOrFail($request->company_id);
@@ -69,8 +70,16 @@ class ContactController extends Controller
             $data['pic'] = $created_by;
             $data['created_by'] = $created_by;
 
-            // dd($data);
-            Contact::create($data);
+            $contact_data = Contact::create($data);
+            $data_address = null;
+            $data_address['contact_id'] = $contact_data->id;
+            $data_address['phone'] = $contact_data->phone;
+            $data_address['province'] = $contact_data->province;
+            $data_address['city'] = $contact_data->city;
+            $data_address['post_code'] = $contact_data->post_code;
+            $data_address['address'] = $contact_data->address;
+            $data_address['default'] = 1;
+            $cekaddress = Contact_address::create($data_address);
         } catch (\Throwable $th) {
             return redirect()->route('contacts.index')
                 ->with('error', 'An error occurred while creating the contact.');
@@ -125,8 +134,8 @@ class ContactController extends Controller
             ],
             'phone' => 'required|max:20',
             'gender' => 'required|string|max:10',
-            'company_id'=> 'required|string|max:10',
-            'segment'=>'required|string|max:50'
+            'company_id' => 'required|string|max:10',
+            'segment' => 'required|string|max:50'
         ]);
 
         $data = $request->all();

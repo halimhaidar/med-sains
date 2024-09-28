@@ -65,6 +65,12 @@ Route::resource('leads', LeadController::class)->middleware('auth');
 Route::resource('quotations', QuotationController::class)->middleware('auth');
 Route::post('quotations/addAddress', [QuotationController::class, 'addNewAddress'])->name('quotations.addAddress')->middleware('auth');
 Route::post('quotations/lead', [QuotationController::class, 'searchLead'])->name('quotations.searchLead')->middleware('auth');
+Route::post('quotations/next-step', [QuotationController::class, 'nextStep'])->name('quotations.nextStep')->middleware('auth');
+Route::post('quotations/search-lead', [QuotationController::class, 'searchLead'])->name('quotations.searchLead')->middleware('auth');
+Route::post('quotations/add-product', [QuotationController::class, 'addProduct'])->name('quotations.addProduct')->middleware('auth');
+Route::post('quotations/next-step-detail', [QuotationController::class, 'nextStepDetail'])->name('quotations.nextStepDetail')->middleware('auth');
+
+
 
 
 

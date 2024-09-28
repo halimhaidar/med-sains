@@ -40,7 +40,6 @@
                 <td>{{ $quotation->description }}</td>
                 <td>
                     <a class="btn btn-info btn-sm" href="{{ route('quotations.show', $quotation->id) }}">Show</a>
-                    <a class="btn btn-primary btn-sm" href="{{ route('quotations.edit', $quotation->id) }}">Edit</a>
                     <form action="{{ route('quotations.destroy', $quotation->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
