@@ -20,10 +20,8 @@ class LeadController extends Controller
     {
         $search = $request->input('search');
 
-        $query = DB::table('med_sains.leads as a')
-            ->join('users as b', 'b.id', '=', 'a.assign_to')
-            ->select('a.*', 'b.fullname');
-
+        $query = Lead::with('user:id,fullname')
+        ->select('leads.*');
 
         if ($search) {
             $query->where('contact_name', 'like', "%$search%")
@@ -35,8 +33,7 @@ class LeadController extends Controller
         }
 
         $leads = $query->paginate(10);
-
-
+  
         return view('leads.index', compact('leads'));
     }
 

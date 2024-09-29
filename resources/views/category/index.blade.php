@@ -164,7 +164,7 @@
                             </div>
                             {{-- End Delete Modal --}}
                         @endif
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
             </tbody>
