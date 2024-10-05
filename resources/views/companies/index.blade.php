@@ -100,7 +100,7 @@
                     </td>
                     <td>
                         <a href="{{ route('companies.show', $company->id) }}"
-                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"">Details</a>
+                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Details</a>
                         @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin')
                             <a href="{{ route('companies.edit', $company->id) }}"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
@@ -160,7 +160,7 @@
         </table>
 
         {{-- Pagination --}}
-        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 pb-2 pe-1"
             aria-label="Table navigation">
             <span
                 class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">

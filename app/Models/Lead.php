@@ -22,6 +22,12 @@ class Lead extends Model
         'assign_to',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'assign_to');
+    }
+
+
     public $incrementing = false; // Important for non-numeric IDs
     protected $keyType = 'string'; // Ensure the ID is treated as a string
 
