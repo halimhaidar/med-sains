@@ -159,7 +159,7 @@
         </table>
 
         {{-- Pagination --}}
-        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 pb-2 pe-1"
             aria-label="Table navigation">
             <span
                 class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">

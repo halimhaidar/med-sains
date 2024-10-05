@@ -113,11 +113,17 @@
                         {{ ucfirst($lead->status) }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $lead->fullname }}
+                        {{ $lead->user->fullname }}
                     </td>
                     <td>
-                        <a href="{{ route('leads.show', $lead->id) }}"
-                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"">Details</a>
+                        <button data-modal-target="popup-modal{{ $lead->id }}"
+                            data-modal-toggle="popup-modal{{ $lead->id }}"
+                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                            type="button">
+                            Detail
+                        </button>
+                        <a href="{{ route('leads.edit', $lead->id) }}"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</a>
                         @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin')
                             {{-- Delete Modal --}}
                             <button data-modal-target="popup-modal{{ $lead->id }}"
@@ -169,13 +175,81 @@
                             {{-- End Delete Modal --}}
                         @endif
                     </td>
+                    {{-- Detail Modal --}}
+                    <div id="popup-modal{{ $lead->id }}" tabindex="-1" aria-hidden="true"
+                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <!-- Modal content -->
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <!-- Modal header -->
+                                <div
+                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Detail Lead {{ $lead->id }}
+                                    </h3>
+                                    <button type="button"
+                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-hide="popup-modal{{ $lead->id }}">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>ID:</strong> {{ $lead->id }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Contact ID:</strong> {{ $lead->contact_id }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Contact Name:</strong> {{ $lead->contact_name }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Contact Phone:</strong> {{ $lead->contact_phone }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Contact Email:</strong> {{ $lead->contact_email }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Contact Company:</strong> {{ $lead->contact_company }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Source:</strong> {{ $lead->source }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Segment:</strong> {{ $lead->segment }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Status:</strong> {{ ucfirst($lead->status) }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Description:</strong> {{ $lead->description }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Assign To:</strong> {{ $lead->user->fullname }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Created At:</strong> {{ $lead->created_at->translatedFormat('d F Y') }}
+                                    </p>
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                        <strong>Updated At:</strong> {{ $lead->updated_at->translatedFormat('d F Y') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </tr>
             @endforeach
             </tbody>
         </table>
 
         {{-- Pagination --}}
-        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 pb-2 pe-1"
             aria-label="Table navigation">
             <span
                 class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
@@ -229,61 +303,4 @@
         {{-- End Pagination --}}
     </div>
 
-    {{-- End Create Modal --}}
-    {{-- <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h2>Leads</h2>
-                <a class="btn btn-success mb-3" href="{{ route('leads.create') }}">Create New Lead</a>
-            </div>
-        </div>
-
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <p>{{ $message }}</p>
-            </div>
-        @endif
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Contact Name</th>
-                    <th>Contact Phone</th>
-                    <th>Contact Email</th>
-                    <th>Company</th>
-                    <th>Source</th>
-                    <th>Segment</th>
-                    <th>Status</th>
-                    <th>Assign To</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($leads as $lead)
-                    <tr>
-                        <td>{{ $lead->id }}</td>
-                        <td>{{ $lead->contact_name }}</td>
-                        <td>{{ $lead->contact_phone }}</td>
-                        <td>{{ $lead->contact_email }}</td>
-                        <td>{{ $lead->contact_company }}</td>
-                        <td>{{ $lead->source }}</td>
-                        <td>{{ $lead->segment }}</td>
-                        <td>{{ ucfirst($lead->status) }}</td>
-                        <td>{{ $lead->fullname }}</td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="{{ route('leads.show', $lead->id) }}">Show</a>
-                            <a class="btn btn-primary btn-sm" href="{{ route('leads.edit', $lead->id) }}">Edit</a>
-                            <form action="{{ route('leads.destroy', $lead->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div> --}}
 @endsection
