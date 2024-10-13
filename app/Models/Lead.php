@@ -27,6 +27,11 @@ class Lead extends Model
         return $this->belongsTo(User::class, 'assign_to');
     }
 
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class, 'contact_id'); // Assuming 'contact_id' is the foreign key in the leads table
+    }
+
 
     public $incrementing = false; // Important for non-numeric IDs
     protected $keyType = 'string'; // Ensure the ID is treated as a string

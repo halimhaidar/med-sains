@@ -9,6 +9,11 @@ class Company extends Model
 {
     use HasFactory;
 
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'company_id'); // 'company_id' is the foreign key
+    }
+
     protected $fillable = [
         'company',
         'division',

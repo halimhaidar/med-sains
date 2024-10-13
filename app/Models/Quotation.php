@@ -9,6 +9,16 @@ class Quotation extends Model
 {
     use HasFactory;
 
+    public function lead()
+    {
+        return $this->belongsTo(Lead::class, 'lead_id');
+    }
+
+    public function contactAddress()
+    {
+        return $this->belongsTo(contact_address::class, 'contact_address_id');
+    }
+
     protected $fillable = [
         'lead_id',
         'contact_address_id',
