@@ -105,11 +105,11 @@ class QuotationController extends Controller
         $listProducts = $queryPrd->paginate(10);
 
         //get selected product
-        $selected_product = Quotation_product::where('quotation_id', $quotation_id)->get();
+        $selected_product = Quotation_product::where('quotation_id', $quotation_id)->with('product')->get();
 
         //user
         $user = Auth::user();
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
         return view('quotations.create', data: compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'));
@@ -387,12 +387,13 @@ class QuotationController extends Controller
                         $data[] = [
                             'quotation_id' => $request->id,
                             'product_id' => $product['product_id'],
-                            'sorting' => $product['product_id'],
+                            'sorting' => $product['sorting'],
                             'quantity' => $product['quantity'],
                             'discount' => $product['discount'],
                             'price_offer' => $product['price_offer'],
                         ];
                     }
+                    Quotation_product::where('quotation_id', $request->id)->delete();
                     Quotation_product::insert($data);
                 } catch (\Throwable $th) {
                     throw $th;

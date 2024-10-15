@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
+
     {{-- Success Message --}}
     @if (session('success'))
         <div id="successMessage"
