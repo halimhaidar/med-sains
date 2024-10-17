@@ -65,7 +65,7 @@ class QuotationController extends Controller
         $leads = $query_lead->paginate(10);
         if ($lead_id) {
             $lead = Lead::with(['contact.company', 'contact.defaultAddress'])->find($lead_id);
-            $list_address = contact_address::where('contact_id', $lead->contact->id)->get();
+            $list_address = Contact_address::where('contact_id', $lead->contact->id)->get();
             // dd($lead->contact);
             if ($lead) {
                 $data = (object)[
@@ -105,7 +105,25 @@ class QuotationController extends Controller
         $listProducts = $queryPrd->paginate(10);
 
         //get selected product
-        $selected_product = Quotation_product::where('quotation_id', $quotation_id)->with('product')->get();
+        $selected_products = Quotation_product::where('quotation_id', $quotation_id)
+        ->with(['product.brand']) // Load product and its brand
+        ->get();
+        $selected_product = [];
+        if ($selected_products->isNotEmpty()) {
+            foreach ($selected_products as $productItem) {
+                $selected_product[] = (object)[
+                    'id' => $productItem->product_id ?? null,
+                    'name' => $productItem->product->name ?? null, // Example product field
+                    'brand_name' => $productItem->product->brand->name ?? null, // Example brand field
+                    'quotation_id' => $productItem->quotation_id ?? null,
+                    'sorting' => $productItem->sorting ?? null,
+                    'quantity' => $productItem->quantity ?? null,
+                    'discount' => $productItem->discount ?? null,
+                    'price_offer' => $productItem->price_offer ?? null,
+                ];
+            }
+        }
+        // dd($selected_product);
 
         //user
         $user = Auth::user();

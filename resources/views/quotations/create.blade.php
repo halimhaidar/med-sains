@@ -228,7 +228,12 @@
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ isset($quotation) ? $quotation->description : '' }}</textarea>
                 </div>
             </div>
-            <div class="flex w-full justify-end">
+            <div class="flex w-full justify-between">
+                <button type="button"
+                        onclick="updateStepQueryParam(1)"
+                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        Previous: Contact Info
+                    </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">
                     Next: Offer Condition
@@ -302,7 +307,12 @@
                     </select>
                 </div>
             </div>
-            <div class="flex w-full justify-end">
+            <div class="flex w-full justify-between">
+            <button type="button"
+                        onclick="updateStepQueryParam(2)"
+                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        Previous: General Data
+                    </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">
                     Next: Product Item
@@ -371,7 +381,12 @@
             </tbody>
             </table>
             </div>
-            <div class="flex w-full justify-end pt-10">
+            <div class="flex w-full justify-between pt-10">
+                <button type="button"
+                        onclick="updateStepQueryParam(3)"
+                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        Previous: Offer Condition
+                    </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">
                     Create Quotation
@@ -384,6 +399,11 @@
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+        function updateStepQueryParam(step) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('step', step);
+            window.location.href = url.toString();
         }
         const currentStep = getQueryParam('step');
         const steps = document.querySelectorAll('.step');
@@ -416,7 +436,7 @@
 
         const jsonSelectedProduct = @json($selected_product);
         if (jsonSelectedProduct.length){ listProducts = [...jsonSelectedProduct]} // product from quotation_product
-        console.log(listProducts)
+        // console.log(listProducts)
 
         
 
@@ -424,13 +444,7 @@
             const selectElement = document.getElementById('product_id');
             const selectedValue = selectElement.value;
             let [filteredProducts] = filterById(dataProductPhp, selectedValue);
-            if (listProducts.find((e) => {
-                if(e.product){
-                    return e.product.id == selectedValue
-                } else {
-                    return e.id == selectedValue
-                }
-            })){ return; }
+            if (listProducts.find((e) => e.id == selectedValue)){ return; }
             listProducts.push(filteredProducts)
             populateTable(listProducts)
         }
@@ -448,13 +462,13 @@
 
                 // Insert columns with product data
                 row.innerHTML = `
-                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input style="display: none;" type="text" name="products[${index}][product_id]" value="${product.product ? product.product.id : product.id}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" readonly />${product.product ? product.product.id : product.id}</td>
-                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200">${product.product ? product.product.name : product.name}</td></td>
+                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input style="display: none;" type="text" name="products[${index}][product_id]" value="${product.id}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" readonly />${product.id}</td>
+                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200">${product.name} | ${product.brand_name}</td></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="number" name="products[${index}][sorting]" value="${product.sorting ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="number" name="products[${index}][quantity]" value="${product.quantity ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="number" name="products[${index}][discount]" value="${product.discount ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="number" name="products[${index}][price_offer]" value="${product.price_offer ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
-                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200">#</td>
+                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><button type="button" onclick="handleDeleteProduct(${product.id})" class="text-red-500">delete</button></td>
                 `;
 
                 // Append the new row to the table body
@@ -466,6 +480,12 @@
 
         function filterById(products, id) {
             return products.filter(product => product.id == id);
+        }
+
+        function handleDeleteProduct(id){
+            const newList = listProducts.filter(product => product.id != id)
+            listProducts = [...newList];
+            populateTable(listProducts)
         }
     </script>
 
