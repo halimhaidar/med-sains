@@ -48,33 +48,41 @@
         </li>
     </ol>
     <div class="form-steps" style="display: none;">
-        <form class="p-10" method="GET" action="{{ route('quotations.create') }}">
-            <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                <div class="col-span-2">
-                    <label for="lead_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lead
-                        Reference</label>
-                    <div class="grid grid-cols-8">
-                        <select id="lead_id" name="lead_id"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option value="" selected>Select Contact Name</option>
-                            @foreach ($leads as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ isset($data) && $item->id == $data->lead_id ? 'selected' : '' }}>
-                                    {{ $item->contact_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <input hidden name="step" value="1" />
-                        <button type="submit"
-                            class="text-white ms-5 max-w-fit bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Choose
-                        </button>
+        <div class="flex items-center">
+            <form class="p-10" method="GET" action="{{ route('quotations.create') }}">
+                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                    <div class="col-span-2">
+                        <label for="lead_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lead
+                            Reference</label>
+                        <div class="grid grid-cols-8">
+                            <select id="lead_id" name="lead_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="" selected>Select Contact Name</option>
+                                @foreach ($leads as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ isset($data) && $item->id == $data->lead_id ? 'selected' : '' }}>
+                                        {{ $item->contact_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input hidden name="step" value="1" />
+                            <button type="submit"
+                                class="text-white ms-5 max-w-fit bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Choose
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
+                class="me-10 block max-h-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button">
+                Add New Address
+            </button>
+        </div>
         <form class="p-10" action="{{ route('quotations.nextStep') }}" method="POST">
             @csrf
+
             <input type="text" name="type" value="contact_info" style="display: none;" />
             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                 <div class="col-span-2">
@@ -139,7 +147,6 @@
                 <div class="col-span-2">
                     <label for="contact_province"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province
-
                     </label>
                     <input type="text" name="contact_province" id="contact_province"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -155,8 +162,7 @@
                 </div>
                 <div class="col-span-2">
                     <label for="contact_post_code"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City
-
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Code
                     </label>
                     <input type="text" name="contact_post_code" id="contact_post_code"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -170,6 +176,76 @@
                 </button>
             </div>
         </form>
+        <div id="crud-modal" tabindex="-1" aria-hidden="true"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 bottom-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-2xl h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            Add New Address
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="crud-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form class="p-4 md:p-5" action="{{ route('quotations.addAddress') }}" method="POST">
+                        @csrf
+                        <div class="grid gap-4 mb-4 grid-cols-4">
+                            <input type="text" name="contact_id" class="form-control"
+                                value="{{ isset($data) ? $data->contact_id : '' }}" hidden>
+                            <div class="col-span-2 ">
+                                <label for="province"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">province</label>
+                                <input type="text" name="province" id="province"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                            </div>
+                            <div class="col-span-2 ">
+                                <label for="city"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                                <input type="text" name="city" id="city"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                            </div>
+                            <div class="col-span-2 ">
+                                <label for="post_code"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Code</label>
+                                <input type="text" name="post_code" id="post_code"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                            </div>
+                            <div class="col-span-2 ">
+                                <label for="phone"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
+                                <input type="text" name="phone" id="phone"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                            </div>
+                            <div class="col-span-2 ">
+                                <label for="address"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address</label>
+                                <textarea id="address" name="address" rows="4"
+                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                            </div>
+                        </div>
+                        <div class="w-full flex justify-end"> <button type="submit"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Add New Address
+                            </button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="form-steps">
         <form class="p-10" action="{{ route('quotations.nextStep') }}" method="POST">
@@ -229,11 +305,10 @@
                 </div>
             </div>
             <div class="flex w-full justify-between">
-                <button type="button"
-                        onclick="updateStepQueryParam(1)"
-                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        Previous: Contact Info
-                    </button>
+                <button type="button" onclick="updateStepQueryParam(1)"
+                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Previous: Contact Info
+                </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">
                     Next: Offer Condition
@@ -308,11 +383,10 @@
                 </div>
             </div>
             <div class="flex w-full justify-between">
-            <button type="button"
-                        onclick="updateStepQueryParam(2)"
-                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        Previous: General Data
-                    </button>
+                <button type="button" onclick="updateStepQueryParam(2)"
+                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Previous: General Data
+                </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">
                     Next: Product Item
@@ -351,42 +425,41 @@
 
             <!-- table -->
             <div class=" overflow-x-auto shadow-md sm:rounded-lg mt-5">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Product | Brand
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Sorting
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Qty
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Discount
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Price
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        #
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="productTableBody">
-            </tbody>
-            </table>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                ID
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Product | Brand
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Sorting
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Qty
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Discount
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Price
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                #
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                    </tbody>
+                </table>
             </div>
             <div class="flex w-full justify-between pt-10">
-                <button type="button"
-                        onclick="updateStepQueryParam(3)"
-                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        Previous: Offer Condition
-                    </button>
+                <button type="button" onclick="updateStepQueryParam(3)"
+                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Previous: Offer Condition
+                </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">
                     Create Quotation
@@ -400,6 +473,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
+
         function updateStepQueryParam(step) {
             const url = new URL(window.location.href);
             url.searchParams.set('step', step);
@@ -429,22 +503,43 @@
             }
         });
 
+        const listAddress = @json($list_address);
+        console.log(listAddress)
+        const selectedAddress = document.getElementById('contact_address_id');
+        const contact_province = document.getElementById('contact_province');
+        const contact_city = document.getElementById('contact_city');
+        const contact_post_code = document.getElementById('contact_post_code');
+        selectedAddress.addEventListener('change', function() {
+            const selectedId = parseInt(selectedAddress.value);
+            const selectedObj = listAddress.find(address => address.id === selectedId);
+
+            if (selectedObj) {
+                contact_province.value = selectedObj.province;
+                contact_city.value = selectedObj.city;
+                contact_post_code.value = selectedObj.post_code;
+            }
+        });
+
         const jsonListProducts = @json($listProducts);
         let dataProductPhp = jsonListProducts.data;
         // console.log(dataProductPhp) // data from product in php
         let listProducts = [];
 
         const jsonSelectedProduct = @json($selected_product);
-        if (jsonSelectedProduct.length){ listProducts = [...jsonSelectedProduct]} // product from quotation_product
+        if (jsonSelectedProduct.length) {
+            listProducts = [...jsonSelectedProduct]
+        } // product from quotation_product
         // console.log(listProducts)
 
-        
+
 
         function onChangeProduct(e) {
             const selectElement = document.getElementById('product_id');
             const selectedValue = selectElement.value;
             let [filteredProducts] = filterById(dataProductPhp, selectedValue);
-            if (listProducts.find((e) => e.id == selectedValue)){ return; }
+            if (listProducts.find((e) => e.id == selectedValue)) {
+                return;
+            }
             listProducts.push(filteredProducts)
             populateTable(listProducts)
         }
@@ -453,12 +548,13 @@
         const tableBody = document.getElementById('productTableBody');
 
         function populateTable(data) {
-                // Clear the existing rows first to avoid duplication
+            // Clear the existing rows first to avoid duplication
             tableBody.innerHTML = '';
             data.forEach((product, index) => {
                 // Create a new row
                 const row = document.createElement('tr');
-                row.classList.add('border-b', 'border-gray-300', 'dark:border-gray-600', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                row.classList.add('border-b', 'border-gray-300', 'dark:border-gray-600', 'hover:bg-gray-100',
+                    'dark:hover:bg-gray-700');
 
                 // Insert columns with product data
                 row.innerHTML = `
@@ -482,7 +578,7 @@
             return products.filter(product => product.id == id);
         }
 
-        function handleDeleteProduct(id){
+        function handleDeleteProduct(id) {
             const newList = listProducts.filter(product => product.id != id)
             listProducts = [...newList];
             populateTable(listProducts)

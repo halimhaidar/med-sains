@@ -73,8 +73,8 @@ class QuotationController extends Controller
                     'contact_id' => $lead->contact->id ?? null,
                     'contact_name' => $lead->contact->name ?? null,
                     'contact_email' => $lead->contact->email ?? null,
-                    'company_id' => $lead->contact->company ?? null, // Ensure that company is not null
-                    'company_name' => $lead->contact->company_id ?? null, // Ensure that company is not null
+                    'company_id' => $lead->contact->company_id ?? null, // Ensure that company is not null
+                    'company_name' => $lead->contact->company ?? null, // Ensure that company is not null
                     'contact_address' => $lead->contact->defaultAddress->address ?? null, // Ensure that defaultAddress is not null
                     'contact_province' => $lead->contact->defaultAddress->province ?? null,
                     'contact_city' => $lead->contact->defaultAddress->city ?? null,
