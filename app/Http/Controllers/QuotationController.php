@@ -102,7 +102,7 @@ class QuotationController extends Controller
                 ->where('category', 'like', "%$search_prd%")
                 ->where('brand_name', 'like', "%$search_prd%");
         }
-        $listProducts = $queryPrd->paginate(10);
+        $listProducts = $queryPrd->get();
 
         //get selected product
         $selected_products = Quotation_product::where('quotation_id', $quotation_id)
@@ -130,7 +130,7 @@ class QuotationController extends Controller
         if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
-        return view('quotations.create', data: compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'));
+        return view('quotations.create', data: compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'))->with('success', 'Success Create Data');
     }
 
     /**
@@ -160,7 +160,6 @@ class QuotationController extends Controller
      */
     public function show(Request $request, $id)
     {
-
         $data = null;
         $list_address = null;
         $lead_id = null;
@@ -199,19 +198,11 @@ class QuotationController extends Controller
                 ->select('q.*', 'a.contact_id as contact_id', 'b.name as contact_name', 'b.email as contact_email', 'b.company_id', 'c.company as company_name', 'd.address as contact_address', 'd.province as contact_province', 'd.city as contact_city', 'd.post_code as contact_post_code', 'd.phone as contact_phone')
                 ->where('q.id',$id)
                 ->first();
-              
-
             $lead_id = $quotation->lead_id;
             $lead = Lead::find($lead_id);
 
             $list_address = Contact_address::where('contact_id', $lead->contact_id)->get();
         }
-
-        $quotation_id = $request->input('quotationId');
-        if ($quotation_id) {
-            $quotation = Quotation::find($quotation_id);
-        }
-
         //set data product for create view
         $search_prd = $request->input('search_products');
         $queryPrd = Products::query();
@@ -221,14 +212,31 @@ class QuotationController extends Controller
                 ->where('category', 'like', "%$search_prd%")
                 ->where('brand_name', 'like', "%$search_prd%");
         }
-        $listProducts = $queryPrd->paginate(10);
+        $listProducts = $queryPrd->get();
 
         //get selected product
-        $selected_product = Quotation_product::where('quotation_id', $quotation_id)->get();
-
+        $selected_products = Quotation_product::where('quotation_id', $id)
+        ->with(['product.brand']) // Load product and its brand
+        ->get();
+        $selected_product = [];
+        if ($selected_products->isNotEmpty()) {
+            foreach ($selected_products as $productItem) {
+                $selected_product[] = (object)[
+                    'id' => $productItem->product_id ?? null,
+                    'name' => $productItem->product->name ?? null, // Example product field
+                    'brand_name' => $productItem->product->brand->name ?? null, // Example brand field
+                    'quotation_id' => $productItem->quotation_id ?? null,
+                    'sorting' => $productItem->sorting ?? null,
+                    'quantity' => $productItem->quantity ?? null,
+                    'discount' => $productItem->discount ?? null,
+                    'price_offer' => $productItem->price_offer ?? null,
+                ];
+            }
+        }
+        // dd($listProducts);
         //user
         $user = Auth::user();
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
         return view('quotations.show', compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'));
@@ -454,7 +462,7 @@ class QuotationController extends Controller
         $newUrl = $parsedUrl['path'] . '?' . $queryString;
         
         // Redirect to the new URL
-        return redirect($newUrl);
+        return redirect($newUrl)->with("success", "Success Create Data");
     }
 
     public function nextStepDetail(Request $request)
@@ -470,7 +478,6 @@ class QuotationController extends Controller
             ]);
             // First, set all other addresses to default = 0
             Contact_address::where('contact_id', $request->contact_id)
-                ->where('id', '!=', $request->contact_address_id)
                 ->update(['default' => 0]);
 
             // Then, set the selected address to default = 1
@@ -556,6 +563,6 @@ class QuotationController extends Controller
         $quotation_id = $quotation->id;
 
 
-        return redirect()->back();
+        return redirect()->back()->with("success", "Success Update Data");
     }
 }
