@@ -1228,9 +1228,6 @@ input:checked + .toggle-bg {
 .h-16 {
   height: 4rem;
 }
-.h-2 {
-  height: 0.5rem;
-}
 .h-3 {
   height: 0.75rem;
 }
@@ -1658,10 +1655,6 @@ input:checked + .toggle-bg {
 .bg-green-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(49 196 141 / var(--tw-bg-opacity));
-}
-.bg-green-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(14 159 110 / var(--tw-bg-opacity));
 }
 .bg-green-700 {
   --tw-bg-opacity: 1;

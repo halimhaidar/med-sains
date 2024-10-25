@@ -130,7 +130,7 @@ class QuotationController extends Controller
         if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
-        return view('quotations.create', data: compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'))->with('success', 'Success Create Data');
+        return view('quotations.create',  compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'))->with('success', 'Success Create Data');
     }
 
     /**
