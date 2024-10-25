@@ -24,7 +24,7 @@ class LoginController extends Controller
         }
         Log::warning("Login failed for email: " . $credentials['email']);
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Wrong Email or Password',
         ]);
     }
 

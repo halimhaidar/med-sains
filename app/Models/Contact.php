@@ -9,6 +9,21 @@ class Contact extends Model
 {
     use HasFactory;
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id'); // 'company_id' is the foreign key
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Contact_address::class);  // Updated model name
+    }
+
+    public function defaultAddress()
+    {
+        return $this->hasOne(Contact_address::class)->where('default', 1);
+    }
+
     protected $fillable = [
         'salutation',
         'name',

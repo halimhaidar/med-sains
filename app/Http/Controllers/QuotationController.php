@@ -24,15 +24,10 @@ class QuotationController extends Controller
     public function index()
     {
 
-        $quotations = DB::table('quotations as q')
-            ->join('leads as a', 'q.lead_id', '=', 'a.id')
-            ->join('contacts as b', 'a.contact_id', '=', 'b.id')
-            ->join('companies as c', 'b.company_id', '=', 'c.id')
-            ->join('contact_addresses as d', 'q.contact_address_id', '=', 'd.id')
-            ->select('q.*', 'a.contact_id as contact_id', 'b.name as contact_name', 'b.email as contact_email', 'b.company_id', 'c.company as company_name', 'd.address as contact_address', 'd.province as contact_province', 'd.city as contact_city', 'd.post_code as contact_post_code', 'd.phone as contact_phone')
-
-            ->get();
-
+        $quotations = Quotation::with([
+            'lead.contact.company', 
+            'contactAddress'
+        ])->paginate(10);
         return view('quotations.index', compact('quotations'));
     }
 
@@ -48,6 +43,7 @@ class QuotationController extends Controller
         $lead_id = $request->input('lead_id');
         $quotation = null;
         $selected_product = null;
+        $step = 1;
 
         $quotation_category = ["Project", "Retail", "Routine"];
         $quotation_source = ["Email", "Whatsapp", "Routine", "Telpon", "Costumer", "Visit Other", "Sales"];
@@ -68,20 +64,28 @@ class QuotationController extends Controller
 
         $leads = $query_lead->paginate(10);
         if ($lead_id) {
-
-
-            $data = DB::table('leads as a')
-                ->where('a.id', $lead_id)
-                ->join('contacts as b', 'a.contact_id', '=', 'b.id')
-                ->join('companies as c', 'b.company_id', '=', 'c.id')
-                ->join('contact_addresses as d', 'a.contact_id', '=', 'd.contact_id')
-                ->select('a.id as lead_id', 'a.contact_id as contact_id', 'b.name as contact_name', 'b.email as contact_email', 'b.company_id', 'c.company as company_name', 'd.address as contact_address', 'd.province as contact_province', 'd.city as contact_city', 'd.post_code as contact_post_code', 'd.phone as contact_phone')
-                ->where('d.default', 1)
-                ->first();
-
-            $lead = Lead::find($lead_id);
-
-            $list_address = Contact_address::where('contact_id', $lead->contact_id)->get();
+            $lead = Lead::with(['contact.company', 'contact.defaultAddress'])->find($lead_id);
+            $list_address = Contact_address::where('contact_id', $lead->contact->id)->get();
+            // dd($lead->contact);
+            if ($lead) {
+                $data = (object)[
+                    'lead_id' => $lead->id,
+                    'contact_id' => $lead->contact->id ?? null,
+                    'contact_name' => $lead->contact->name ?? null,
+                    'contact_email' => $lead->contact->email ?? null,
+                    'company_id' => $lead->contact->company_id ?? null, // Ensure that company is not null
+                    'company_name' => $lead->contact->company ?? null, // Ensure that company is not null
+                    'contact_address' => $lead->contact->defaultAddress->address ?? null, // Ensure that defaultAddress is not null
+                    'contact_province' => $lead->contact->defaultAddress->province ?? null,
+                    'contact_city' => $lead->contact->defaultAddress->city ?? null,
+                    'contact_post_code' => $lead->contact->defaultAddress->post_code ?? null,
+                    'contact_phone' => $lead->contact->defaultAddress->phone ?? null,
+                ];
+                // dd($lead);
+            } else {
+                // Handle the case where the lead is not found
+            }
+            
         }
 
         $quotation_id = $request->input('quotationId');
@@ -98,17 +102,35 @@ class QuotationController extends Controller
                 ->where('category', 'like', "%$search_prd%")
                 ->where('brand_name', 'like', "%$search_prd%");
         }
-        $listProducts = $queryPrd->paginate(10);
+        $listProducts = $queryPrd->get();
 
         //get selected product
-        $selected_product = Quotation_product::where('quotation_id', $quotation_id)->get();
+        $selected_products = Quotation_product::where('quotation_id', $quotation_id)
+        ->with(['product.brand']) // Load product and its brand
+        ->get();
+        $selected_product = [];
+        if ($selected_products->isNotEmpty()) {
+            foreach ($selected_products as $productItem) {
+                $selected_product[] = (object)[
+                    'id' => $productItem->product_id ?? null,
+                    'name' => $productItem->product->name ?? null, // Example product field
+                    'brand_name' => $productItem->product->brand->name ?? null, // Example brand field
+                    'quotation_id' => $productItem->quotation_id ?? null,
+                    'sorting' => $productItem->sorting ?? null,
+                    'quantity' => $productItem->quantity ?? null,
+                    'discount' => $productItem->discount ?? null,
+                    'price_offer' => $productItem->price_offer ?? null,
+                ];
+            }
+        }
+        // dd($selected_product);
 
         //user
         $user = Auth::user();
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
-        return view('quotations.create', compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'));
+        return view('quotations.create', data: compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'))->with('success', 'Success Create Data');
     }
 
     /**
@@ -138,7 +160,6 @@ class QuotationController extends Controller
      */
     public function show(Request $request, $id)
     {
-
         $data = null;
         $list_address = null;
         $lead_id = null;
@@ -177,19 +198,11 @@ class QuotationController extends Controller
                 ->select('q.*', 'a.contact_id as contact_id', 'b.name as contact_name', 'b.email as contact_email', 'b.company_id', 'c.company as company_name', 'd.address as contact_address', 'd.province as contact_province', 'd.city as contact_city', 'd.post_code as contact_post_code', 'd.phone as contact_phone')
                 ->where('q.id',$id)
                 ->first();
-              
-
             $lead_id = $quotation->lead_id;
             $lead = Lead::find($lead_id);
 
             $list_address = Contact_address::where('contact_id', $lead->contact_id)->get();
         }
-
-        $quotation_id = $request->input('quotationId');
-        if ($quotation_id) {
-            $quotation = Quotation::find($quotation_id);
-        }
-
         //set data product for create view
         $search_prd = $request->input('search_products');
         $queryPrd = Products::query();
@@ -199,14 +212,31 @@ class QuotationController extends Controller
                 ->where('category', 'like', "%$search_prd%")
                 ->where('brand_name', 'like', "%$search_prd%");
         }
-        $listProducts = $queryPrd->paginate(10);
+        $listProducts = $queryPrd->get();
 
         //get selected product
-        $selected_product = Quotation_product::where('quotation_id', $quotation_id)->get();
-
+        $selected_products = Quotation_product::where('quotation_id', $id)
+        ->with(['product.brand']) // Load product and its brand
+        ->get();
+        $selected_product = [];
+        if ($selected_products->isNotEmpty()) {
+            foreach ($selected_products as $productItem) {
+                $selected_product[] = (object)[
+                    'id' => $productItem->product_id ?? null,
+                    'name' => $productItem->product->name ?? null, // Example product field
+                    'brand_name' => $productItem->product->brand->name ?? null, // Example brand field
+                    'quotation_id' => $productItem->quotation_id ?? null,
+                    'sorting' => $productItem->sorting ?? null,
+                    'quantity' => $productItem->quantity ?? null,
+                    'discount' => $productItem->discount ?? null,
+                    'price_offer' => $productItem->price_offer ?? null,
+                ];
+            }
+        }
+        // dd($listProducts);
         //user
         $user = Auth::user();
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
         return view('quotations.show', compact('leads', 'data', 'quotation_category', 'quotation_source', 'dev_con', 'top', 'list_address', 'quotation', 'listProducts', 'selected_product', 'user'));
@@ -323,6 +353,7 @@ class QuotationController extends Controller
     {
         $data = null;
         $type = $request->input('type');
+        $step = 0;
 
         //devide type of next step 
         if ($type == 'contact_info') {
@@ -348,6 +379,7 @@ class QuotationController extends Controller
                     'contact_address_id' => $request->contact_address_id
                 ]
             );
+            $step = 2;
         } else if ($type == 'general_data') {
 
             Quotation::where('id', $request->id)->update([
@@ -357,6 +389,7 @@ class QuotationController extends Controller
                 'description' => $request->description,
             ]);
             $quotation = Quotation::find($request->id);
+            $step = 3;
         } else if ($type == 'offer_condition') {
 
             Quotation::where('id', $request->id)->update([
@@ -368,6 +401,7 @@ class QuotationController extends Controller
 
             ]);
             $quotation = Quotation::find($request->id);
+            $step = 4;
         } else if ($type == 'product_item') {
             $data = [];
 
@@ -379,12 +413,13 @@ class QuotationController extends Controller
                         $data[] = [
                             'quotation_id' => $request->id,
                             'product_id' => $product['product_id'],
-                            'sorting' => $product['product_id'],
+                            'sorting' => $product['sorting'],
                             'quantity' => $product['quantity'],
                             'discount' => $product['discount'],
                             'price_offer' => $product['price_offer'],
                         ];
                     }
+                    Quotation_product::where('quotation_id', $request->id)->delete();
                     Quotation_product::insert($data);
                 } catch (\Throwable $th) {
                     throw $th;
@@ -402,12 +437,32 @@ class QuotationController extends Controller
             }
 
             $quotation = Quotation::find($request->id);
+            $step = 4;
         }
 
         $quotation_id = $quotation->id;
 
-        $url = url()->previous() . '&quotationId=' . $quotation_id;
-        return redirect($url);
+        $previousUrl = url()->previous();
+        $queryParams = [
+            'quotationId' => $quotation_id,
+            'step' => $step,
+        ];
+        
+        // Parse existing query parameters from the previous URL
+        $parsedUrl = parse_url($previousUrl);
+        parse_str($parsedUrl['query'] ?? '', $existingParams);
+        
+        // Merge existing parameters with new ones
+        $params = array_merge($existingParams, $queryParams);
+        
+        // Rebuild the query string
+        $queryString = http_build_query($params);
+        
+        // Construct the new URL
+        $newUrl = $parsedUrl['path'] . '?' . $queryString;
+        
+        // Redirect to the new URL
+        return redirect($newUrl)->with("success", "Success Create Data");
     }
 
     public function nextStepDetail(Request $request)
@@ -423,7 +478,6 @@ class QuotationController extends Controller
             ]);
             // First, set all other addresses to default = 0
             Contact_address::where('contact_id', $request->contact_id)
-                ->where('id', '!=', $request->contact_address_id)
                 ->update(['default' => 0]);
 
             // Then, set the selected address to default = 1
@@ -509,6 +563,6 @@ class QuotationController extends Controller
         $quotation_id = $quotation->id;
 
 
-        return redirect()->back();
+        return redirect()->back()->with("success", "Success Update Data");
     }
 }

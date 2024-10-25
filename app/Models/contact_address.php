@@ -16,7 +16,7 @@ class Contact_address extends Model
     //     'city',
     //     'address',
     //     'post_code',
-
+    //     'default'
     // ];
 
     protected $guarded = [];

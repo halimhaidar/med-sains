@@ -51,10 +51,11 @@ class LeadController extends Controller
         $contact = Contact::find($contact_id);
 
         $user = Auth::user();
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'superadmin') {
             $user = User::all();
         }
         return view('leads.create', compact('contactsAll', 'contact', 'user'));
+    
     }
 
     /**

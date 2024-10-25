@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
+
     {{-- Success Message --}}
     @if (session('success'))
         <div id="successMessage"
@@ -270,11 +271,8 @@
                 }
             }
 
-            // Run check on page load
             checkContactId();
 
-            // You can also call this function if the contact_id input ever changes dynamically.
-            // For example, if you want to trigger a check when another script sets the contact_id value.
         });
     </script>
 @endsection
