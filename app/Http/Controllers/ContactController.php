@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Contact;
-use App\Models\contact_address;
+use App\Models\ContactAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -79,7 +79,7 @@ class ContactController extends Controller
             $data_address['post_code'] = $contact_data->post_code;
             $data_address['address'] = $contact_data->address;
             $data_address['default'] = 1;
-            $cekaddress = Contact_address::create($data_address);
+            $cekaddress = ContactAddress::create($data_address);
         } catch (\Throwable $th) {
             return redirect()->route('contacts.index')
                 ->with('error', 'An error occurred while creating the contact.');

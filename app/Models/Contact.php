@@ -16,12 +16,12 @@ class Contact extends Model
 
     public function addresses()
     {
-        return $this->hasMany(Contact_address::class);  // Updated model name
+        return $this->hasMany(ContactAddress::class);  // Updated model name
     }
 
     public function defaultAddress()
     {
-        return $this->hasOne(Contact_address::class)->where('default', 1);
+        return $this->hasOne(ContactAddress::class)->where('default', 1);
     }
 
     protected $fillable = [

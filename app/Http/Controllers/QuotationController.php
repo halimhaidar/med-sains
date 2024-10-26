@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
-use App\Models\Contact_address;
+use App\Models\ContactAddress;
 use App\Models\Lead;
 use App\Models\Products;
 use App\Models\Quotation;
-use App\Models\Quotation_product;
+use App\Models\QuotationProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,7 +65,7 @@ class QuotationController extends Controller
         $leads = $query_lead->paginate(10);
         if ($lead_id) {
             $lead = Lead::with(['contact.company', 'contact.defaultAddress'])->find($lead_id);
-            $list_address = Contact_address::where('contact_id', $lead->contact->id)->get();
+            $list_address = ContactAddress::where('contact_id', $lead->contact->id)->get();
             // dd($lead->contact);
             if ($lead) {
                 $data = (object)[
@@ -105,7 +105,7 @@ class QuotationController extends Controller
         $listProducts = $queryPrd->get();
 
         //get selected product
-        $selected_products = Quotation_product::where('quotation_id', $quotation_id)
+        $selected_products = QuotationProduct::where('quotation_id', $quotation_id)
         ->with(['product.brand']) // Load product and its brand
         ->get();
         $selected_product = [];
@@ -201,7 +201,7 @@ class QuotationController extends Controller
             $lead_id = $quotation->lead_id;
             $lead = Lead::find($lead_id);
 
-            $list_address = Contact_address::where('contact_id', $lead->contact_id)->get();
+            $list_address = ContactAddress::where('contact_id', $lead->contact_id)->get();
         }
         //set data product for create view
         $search_prd = $request->input('search_products');
@@ -215,7 +215,7 @@ class QuotationController extends Controller
         $listProducts = $queryPrd->get();
 
         //get selected product
-        $selected_products = Quotation_product::where('quotation_id', $id)
+        $selected_products = QuotationProduct::where('quotation_id', $id)
         ->with(['product.brand']) // Load product and its brand
         ->get();
         $selected_product = [];
@@ -343,7 +343,7 @@ class QuotationController extends Controller
             'contact_id' => 'required|string|max:255'
         ]);
 
-        Contact_address::create($request->all());
+        ContactAddress::create($request->all());
 
         return redirect()->back();
     }
@@ -361,12 +361,12 @@ class QuotationController extends Controller
                 'lead_id' => 'required|string|max:255'
             ]);
             // First, set all other addresses to default = 0
-            Contact_address::where('contact_id', $request->contact_id)
+            ContactAddress::where('contact_id', $request->contact_id)
                 ->where('id', '!=', $request->contact_address_id)
                 ->update(['default' => 0]);
 
             // Then, set the selected address to default = 1
-            Contact_address::where('id', $request->contact_address_id)
+            ContactAddress::where('id', $request->contact_address_id)
                 ->update(['default' => 1]);
 
 
@@ -419,8 +419,8 @@ class QuotationController extends Controller
                             'price_offer' => $product['price_offer'],
                         ];
                     }
-                    Quotation_product::where('quotation_id', $request->id)->delete();
-                    Quotation_product::insert($data);
+                    QuotationProduct::where('quotation_id', $request->id)->delete();
+                    QuotationProduct::insert($data);
                 } catch (\Throwable $th) {
                     throw $th;
                 }
@@ -477,11 +477,11 @@ class QuotationController extends Controller
                 'lead_id' => 'required|string|max:255'
             ]);
             // First, set all other addresses to default = 0
-            Contact_address::where('contact_id', $request->contact_id)
+            ContactAddress::where('contact_id', $request->contact_id)
                 ->update(['default' => 0]);
 
             // Then, set the selected address to default = 1
-            Contact_address::where('id', $request->contact_address_id)
+            ContactAddress::where('id', $request->contact_address_id)
                 ->update(['default' => 1]);
 
 
@@ -531,7 +531,7 @@ class QuotationController extends Controller
                             'price_offer' => $product['price_offer'],
                         ];
                     }
-                    Quotation_product::insert($data);
+                    QuotationProduct::insert($data);
                 } catch (\Throwable $th) {
                     throw $th;
                 }

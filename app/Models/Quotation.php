@@ -16,7 +16,7 @@ class Quotation extends Model
 
     public function contactAddress()
     {
-        return $this->belongsTo(Contact_address::class, 'contact_address_id');
+        return $this->belongsTo(ContactAddress::class, 'contact_address_id');
     }
 
     protected $fillable = [
