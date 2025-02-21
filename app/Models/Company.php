@@ -14,12 +14,18 @@ class Company extends Model
         return $this->hasMany(Contact::class, 'company_id'); // 'company_id' is the foreign key
     }
 
+    public function area()
+    {
+    return $this->belongsTo(DataArea::class, 'subdistrict_code', 'subdistrict_code');
+    }
+
     protected $fillable = [
         'company',
         'division',
         'segment',
         'website',
         'npwp',
+        'subdistrict_code',
         'address',
         'phone',
         'sub_segment',

@@ -79,8 +79,12 @@ class BrandController extends Controller
         $imageSrc = 'data:image/jpeg;base64,' . $brand->image_brand;
 
         $brand->image_brand = $imageSrc;
+
         $categories = Category::all();
-        return view('brands.show', compact('brand','categories'));
+
+        $products = $brand->products;
+        
+        return view('brands.show', compact('brand','categories','products'));
     }
 
     /**

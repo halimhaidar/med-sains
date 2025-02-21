@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DataAreaController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuotationController;
@@ -48,7 +49,9 @@ Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEm
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
+//getdatacompanyId
 
+Route::get('get-company-data/{id}', [CompanyController::class, 'getCompanyData']);
 Route::resource('companies', CompanyController::class)->middleware('auth');
 
 Route::resource('contacts', ContactController::class)->middleware('auth');
@@ -69,6 +72,12 @@ Route::post('quotations/next-step', [QuotationController::class, 'nextStep'])->n
 Route::post('quotations/search-lead', [QuotationController::class, 'searchLead'])->name('quotations.searchLead')->middleware('auth');
 Route::post('quotations/add-product', [QuotationController::class, 'addProduct'])->name('quotations.addProduct')->middleware('auth');
 Route::post('quotations/next-step-detail', [QuotationController::class, 'nextStepDetail'])->name('quotations.nextStepDetail')->middleware('auth');
+
+//route data areas
+Route::get('get-cities/{province_id}', [DataAreaController::class, 'getCities']);
+Route::get('get-district/{city_id}', [DataAreaController::class, 'getDistrict']);
+Route::get('get-subdistrict/{city_id}', [DataAreaController::class, 'getSubdistrict']);
+
 
 
 

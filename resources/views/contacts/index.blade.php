@@ -240,11 +240,15 @@
                     @csrf
                     <div class="grid gap-4 mb-4 grid-cols-4">
                         <div class="col-span-2">
-                            <label for="salutation"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salutation</label>
-                            <input type="text" name="salutation" id="salutation"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
+                        <label for="salutation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salutation</label>
+                        <select id="salutation" name="salutation" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option selected disabled>Select Salutation</option>
+                            @foreach($salutations as $salutation)
+                            <option value="{{ $salutation->id }}">{{ $salutation->salutation }}</option>
+                            @endforeach
+                        </select>
                         </div>
                         <div class="col-span-2 ">
                             <label for="name"
@@ -317,6 +321,18 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         </div>
                         <div class="col-span-2 ">
+                            <label for="district"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">District</label>
+                            <input type="text" name="district" id="district"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        </div>
+                        <div class="col-span-2 ">
+                            <label for="subdistrict"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subdistrict</label>
+                            <input type="text" name="subdistrict" id="subdistrict"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        </div>
+                        <div class="col-span-2 ">
                             <label for="post_code"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Code</label>
                             <input type="text" name="post_code" id="post_code"
@@ -362,5 +378,35 @@
         </div>
     </div>
     {{-- End Create Modal --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+             var baseUrl = $('meta[name="base-url"]').attr('content');
+
+            $('#company_id').change(function() {
+                var companyId = $(this).val();
+                // console.log('companyid',companyId);
+                if (companyId) {
+                    $.get(baseUrl +'/get-company-data/' + companyId, function(data) {
+                        $('#province').val(data.area.province_name);
+                        $('#city').val(data.area.city_name);
+                        $('#district').val(data.area.district_name);
+                        $('#subdistrict').val(data.area.subdistrict_name);
+                        $('#post_code').val(data.post_code);
+                        $('#address').val(data.address);
+
+                    });
+                } else {
+                    $('#province').val('');
+                    $('#city').val('');
+                    $('#district').val('');
+                    $('#subdistrict').val('');
+                    $('#post_code').val('');
+                    $('#address').val('');
+
+                }
+            });
+        });
+    </script>
 
 @endsection

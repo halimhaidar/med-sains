@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\ContactAddress;
+use App\Models\DataArea;
+use App\Models\Salutations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -19,6 +21,7 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $srcCompany = $request->input('searCompany');
 
         $query = Contact::query();
 
@@ -31,7 +34,23 @@ class ContactController extends Controller
         $companies = Company::all();
         $contacts = $query->paginate(10);
 
-        return view('contacts.index', compact('contacts', 'companies'));
+        //get salutation
+        $salutations = Salutations::select('id', 'salutation')->get();
+
+        //search company
+        if ($srcCompany) {
+            $companies = Company::where('company', 'like', "%$srcCompany%")->get();
+        }
+        //data area
+        $subdistrictCodes = $companies->pluck('subdistrict_code')->unique();
+        $areas = DataArea::whereIn('subdistrict_code', $subdistrictCodes)->get()->keyBy('subdistrict_code');
+
+        $companies = $companies->map(function ($company) use ($areas) {
+            $company->area = $areas->get($company->subdistrict_code);
+            return $company;
+        });
+
+        return view('contacts.index', compact('contacts', 'companies', 'salutations'));
     }
 
     /**

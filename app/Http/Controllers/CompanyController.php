@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\DataArea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,24 +17,31 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-    
+
         $query = Company::query();
-    
+
         if ($search) {
             $query->where('company', 'like', "%$search%")
-                  ->orWhere('pic', 'like', "%$search%")
-                  ->orWhere('segment', 'like', "%$search%")
-                  ->orWhere('division', 'like', "%$search%");
+                ->orWhere('pic', 'like', "%$search%")
+                ->orWhere('segment', 'like', "%$search%")
+                ->orWhere('division', 'like', "%$search%");
         }
-    
+
         $companies = $query->paginate(10);
-    
-        return view('companies.index', compact('companies'));
+
+        //get data province
+        $provinces = DataArea::select('province_code', 'province_name')
+            ->orderBy('province_code', 'asc')
+            ->distinct()
+            ->get();
+
+        return view('companies.index', compact('companies', 'provinces'));
     }
 
     public function show($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::with('area')->find($id);
+        //dd($company->area);
         return view('companies.show', compact('company'));
     }
 
@@ -44,10 +52,11 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'company' => 'required|string|max:255',
             'division' => 'required|string|max:255',
-            'segment' => 'required|string|max:255|in:hospital,industry,education',
+            'segment' => 'required|string|max:255|in:hospital,industry,academic',
         ]);
         try {
             $created_by = Auth::user()->fullname;
@@ -66,7 +75,7 @@ class CompanyController extends Controller
         } catch (\Throwable $th) {
             log::info('Create Company error with:' . $th);
             return redirect()->route('companies.index')
-            ->with('error', 'An error occurred while creating the company.');
+                ->with('error', 'An error occurred while creating the company.');
         }
     }
 
@@ -97,5 +106,15 @@ class CompanyController extends Controller
 
         return redirect()->route('companies.index')
             ->with('success', 'Company deleted successfully.');
+    }
+
+    public function getCompanyData($id)
+    {
+        $company = Company::with('area')->find($id);
+        // return response()->json([
+        //     'company' => $company,
+        //     'area' => $company->area
+        // ]);
+        return response()->json($company);
     }
 }
