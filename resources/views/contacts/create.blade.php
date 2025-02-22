@@ -109,7 +109,8 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Post Code:</strong>
-                        <input type="text" name="post_code" class="form-control" placeholder="Post Code">
+                        <input type="text" name="post_code" class="form-control" placeholder="Post Code" pattern="[0-9]+"
+                            title="Only numbers are allowed">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">

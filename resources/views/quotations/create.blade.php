@@ -182,7 +182,8 @@
                     <label for="contact_post_code"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Code
                     </label>
-                    <input type="text" name="contact_post_code" id="contact_post_code"
+                    <input type="text" name="contact_post_code" id="contact_post_code" pattern="[0-9]+"
+                        title="Only numbers are allowed"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         value="{{ isset($data) ? $data->contact_post_code : '' }}" readonly />
                 </div>
@@ -238,7 +239,8 @@
                             <div class="col-span-2 ">
                                 <label for="post_code"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Code</label>
-                                <input type="text" name="post_code" id="post_code"
+                                <input type="text" name="post_code" id="post_code" pattern="[0-9]+"
+                                    title="Only numbers are allowed"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                             </div>
