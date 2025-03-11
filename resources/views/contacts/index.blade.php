@@ -11,9 +11,9 @@
     @endif
     @if (session('error'))
         <div id="successMessage"
-            class="bg-green-400 border border-green-400 text-black dark:text-white px-4 py-3 rounded-lg mb-5" role="alert">
-            <strong class="font-bold">Success!</strong>
-            <span class="block sm:inline">{{ session('success') }}</span>
+            class="bg-red-400 border border-red-400 text-black dark:text-white px-4 py-3 rounded-lg mb-5" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline">{{ session('error') }}</span>
         </div>
     @endif
     {{-- End Success Message --}}

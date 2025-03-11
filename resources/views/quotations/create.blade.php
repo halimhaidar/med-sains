@@ -584,7 +584,7 @@
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][sorting]" value="${product.sorting ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" pattern="[0-9]+"
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][quantity]" value="${product.quantity ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
-                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" pattern="[0-9]+"
+                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" id="discount-${index}"
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][discount]" value="${product.discount ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" pattern="[0-9]+"
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][price_offer]" value="${product.price_offer ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
@@ -593,6 +593,7 @@
 
                 // Append the new row to the table body
                 tableBody.appendChild(row);
+                document.getElementById(`discount-${index}`).setAttribute("pattern", "^\\d+(\\.\\d{1,2})?$");
             });
         }
 

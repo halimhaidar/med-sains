@@ -138,157 +138,159 @@
         </ul>
     </div>
     <div id="default-tab-content">
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="overview" role="tabpanel"
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 w-2/3" id="overview" role="tabpanel"
             aria-labelledby="overview-tab">
-            <div id="pdf-content" style="margin: 20px; background-color: white;" class="text-xs">
-                <div class="mx-auto bg-white shadow-md border-2 border-black p-4">
-                    <!-- Header Section -->
-                    <div class="border-b pb-6 mb-6">
-                        <div class="flex justify-between items-center">
-                            <!-- Company Info -->
-                            <div>
-                                <img src="{{ asset('image/logo/medisains.svg') }}" class="h-16" alt="Medisains Logo" />
-                            </div>
-                            <div>
-                                <h1 class="text-sm font-bold text-gray-800">Medsains</h1>
-                                <p class="font-semibold text-gray-700">PT Bioteknologi Sinergi Mandiri</p>
-                                <div class="text-gray-600">
-                                    <p>Ruko Pesona View, Blok B No.4</p>
-                                    <p>Jl. Ir. H. Juanda, Sukma Jaya,</p>
-                                    <p>Depok, 16411</p>
-                                    <p>Telepon : 021-77846655</p>
-                                    <p>Email : info@advisains.id</p>
-                                    <p>Website : www.advisains.id</p>
-                                </div>
-                            </div>
-
-                            <!-- Quotation Number -->
-                            <div class="text-right">
-                                <h2 class="text-sm font-bold text-gray-800">QUOTATION</h2>
-                                <p class="text-gray-600">{{ $data->id }}</p>
-                            </div>
+<div class="test p-5 bg-white mb-5">
+    <div id="pdf-content" style="margin: 20px; background-color: white;" class="text-xs">
+        <div class="mx-auto bg-white shadow-md border-2 border-black p-4">
+            <!-- Header Section -->
+            <div class="border-b pb-6 mb-6">
+                <div class="flex justify-between items-center">
+                    <!-- Company Info -->
+                    <div>
+                        <img src="{{ asset('image/logo/medisains.svg') }}" class="h-16" alt="Medisains Logo" />
+                    </div>
+                    <div>
+                        <h1 class="text-sm font-bold text-gray-800">Medsains</h1>
+                        <p class="font-semibold text-gray-700">PT Bioteknologi Sinergi Mandiri</p>
+                        <div class="text-gray-600">
+                            <p>Ruko Pesona View, Blok B No.4</p>
+                            <p>Jl. Ir. H. Juanda, Sukma Jaya,</p>
+                            <p>Depok, 16411</p>
+                            <p>Telepon : 021-77846655</p>
+                            <p>Email : info@advisains.id</p>
+                            <p>Website : www.advisains.id</p>
                         </div>
                     </div>
 
-                    <!-- Details Grid -->
-                    <div class="grid grid-cols-2 text-xs">
-                        <div>
-                            <!-- Left Column -->
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Date</span>
-                                <span class="text-gray-800">:
-                                    {{ \Carbon\Carbon::parse($data->created_at)->translatedFormat('d F Y') }}</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Company</span>
-                                <span class="text-gray-800">: {{ $data->company_name }}</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Contact</span>
-                                <span class="text-gray-800">: {{ $data->contact_name }}</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Bill to</span>
-                                <span class="text-gray-800">: {{ $data->contact_name }}</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Address</span>
-                                <span class="text-gray-800">: {{ $data->contact_address }}</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <!-- Right Column -->
-                            <div class="grid grid-cols-[6rem_1fr] row-span-2 items-start">
-                                <span class="text-gray-600">Delivery to</span>
-                                <span class="text-gray-800">: {{ $data->contact_name }} </span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Kurs</span>
-                                <span class="text-gray-800">: IDR</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Term</span>
-                                <span class="text-gray-800">: {{ $data->term_of_payment }}</span>
-                            </div>
-                        </div>
+                    <!-- Quotation Number -->
+                    <div class="text-right">
+                        <h2 class="text-sm font-bold text-gray-800">QUOTATION</h2>
+                        <p class="text-gray-600">{{ $data->id }}</p>
                     </div>
                 </div>
-                @php
-                    $totalPrice = 0;
-                @endphp
-                <div class="grid grid-cols-7 gap-4 p-2">
-                    <div class="whitespace-nowrap">No.</div>
-                    <div class="whitespace-nowrap">Product name</div>
-                    <div class="whitespace-nowrap">Brand name</div>
-                    <div class="whitespace-nowrap">Quantity</div>
-                    <div class="whitespace-nowrap">Price</div>
-                    <div class="whitespace-nowrap">Discount</div>
-                    <div class="whitespace-nowrap">Total Price</div>
-                    @foreach ($selected_product as $index => $product)
-                        <div class="whitespace-nowrap">{{ $index + 1 }}.</div>
-                        <div class="whitespace-nowrap">{{ $product->name }}</div>
-                        <div class="whitespace-nowrap">{{ $product->brand_name }}</div>
-                        <div class="whitespace-nowrap">{{ $product->quantity }}</div>
-                        <div class="whitespace-nowrap">Rp. {{ number_format($product->price_offer, 0, ',', '.') }}</div>
-                        <div class="whitespace-nowrap">{{ $product->discount }} %</div>
-                        @php
-                            $productPrice = $product->price_offer;
-                            $quantity = $product->quantity;
-                            $discountPercentage = $product->discount / 100;
-
-                            $finalPrice = $productPrice * $quantity * (1 - $discountPercentage);
-                            $totalPrice = $totalPrice + $finalPrice;
-                        @endphp
-                        <div class="whitespace-nowrap">Rp. {{ number_format($finalPrice, 0, ',', '.') }}</div>
-                    @endforeach
-                </div>
-                <div class="border-2 border-black min-h-16 mt-20 text-xs p-2">
-                    <div class="text-xs m-0 p-0 h-fit">
-                        <span class="text-gray-600">Offer Conditions :</span>
-                    </div>
-                    <div class="grid grid-cols-[1fr_1fr]">
-                        <div>
-                            <!-- Left Column -->
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Descriptions</span>
-                                <span class="text-gray-800">: {{ $data->description }}</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Installation Cost</span>
-                                <span class="text-gray-800">: ?????</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Franco</span>
-                                <span class="text-gray-800">: {{ $data->franco }}</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Validity</span>
-                                <span class="text-gray-800">: {{ $data->validity }} Days</span>
-                            </div>
-                            <div class="grid grid-cols-[6rem_1fr] items-start">
-                                <span class="text-gray-600">Delivery</span>
-                                <span class="text-gray-800">: {{ $data->delivery_estimation }}</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <!-- Right Column -->
-                            <div class="grid grid-cols-[6rem_1fr] row-span-2 items-start">
-                                <span class="text-gray-600">Grand Total</span>
-                                <span class="text-gray-800">: Rp. {{ number_format($totalPrice, 0, ',', '.') }} </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-lg p-4">MediSains</div>
-                <div class="text-sm p-4">Signature ????</div>
-                <div class="grid grid-rows-2 items-start p-4">
-                    <span class="text-sm text-gray-800">Ini Siapa ?</span>
-                    <span class="text-sm text-gray-800">Ini Nomor Siapa ?</span>
-                </div>
-
             </div>
+
+            <!-- Details Grid -->
+            <div class="grid grid-cols-2 text-xs">
+                <div>
+                    <!-- Left Column -->
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Date</span>
+                        <span class="text-gray-800">:
+                            {{ \Carbon\Carbon::parse($data->created_at)->translatedFormat('d F Y') }}</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Company</span>
+                        <span class="text-gray-800">: {{ $data->company_name }}</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Contact</span>
+                        <span class="text-gray-800">: {{ $data->contact_name }}</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Bill to</span>
+                        <span class="text-gray-800">: {{ $data->contact_name }}</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Address</span>
+                        <span class="text-gray-800">: {{ $data->contact_address }}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <!-- Right Column -->
+                    <div class="grid grid-cols-[6rem_1fr] row-span-2 items-start">
+                        <span class="text-gray-600">Delivery to</span>
+                        <span class="text-gray-800">: {{ $data->contact_name }} </span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Kurs</span>
+                        <span class="text-gray-800">: IDR</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Term</span>
+                        <span class="text-gray-800">: {{ $data->term_of_payment }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @php
+            $totalPrice = 0;
+        @endphp
+        <div class="grid grid-cols-7 gap-4 p-2">
+            <div class="whitespace-nowrap">No.</div>
+            <div class="whitespace-normal">Product name</div>
+            <div class="whitespace-normal">Brand name</div>
+            <div class="whitespace-nowrap">Quantity</div>
+            <div class="whitespace-nowrap">Price</div>
+            <div class="whitespace-nowrap">Discount</div>
+            <div class="whitespace-nowrap">Total Price</div>
+            @foreach ($selected_product as $index => $product)
+                <div class="whitespace-nowrap">{{ $index + 1 }}.</div>
+                <div class="whitespace-normal">{{ $product->name }}</div>
+                <div class="whitespace-normal">{{ $product->brand_name }}</div>
+                <div class="whitespace-nowrap">{{ $product->quantity }}</div>
+                <div class="whitespace-nowrap">Rp. {{ number_format($product->price_offer, 0, ',', '.') }}</div>
+                <div class="whitespace-nowrap">{{ $product->discount }} %</div>
+                @php
+                    $productPrice = $product->price_offer;
+                    $quantity = $product->quantity;
+                    $discountPercentage = $product->discount / 100;
+
+                    $finalPrice = $productPrice * $quantity * (1 - $discountPercentage);
+                    $totalPrice = $totalPrice + $finalPrice;
+                @endphp
+                <div class="whitespace-nowrap">Rp. {{ number_format($finalPrice, 0, ',', '.') }}</div>
+            @endforeach
+        </div>
+        <div class="border-2 border-black min-h-16 mt-20 text-xs p-2">
+            <div class="text-xs m-0 p-0 h-fit">
+                <span class="text-gray-600">Offer Conditions :</span>
+            </div>
+            <div class="grid grid-cols-[1fr_1fr]">
+                <div>
+                    <!-- Left Column -->
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Descriptions</span>
+                        <span class="text-gray-800">: {{ $data->description }}</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Installation Cost</span>
+                        <span class="text-gray-800">: ?????</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Franco</span>
+                        <span class="text-gray-800">: {{ $data->franco }}</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Validity</span>
+                        <span class="text-gray-800">: {{ $data->validity }} Days</span>
+                    </div>
+                    <div class="grid grid-cols-[6rem_1fr] items-start">
+                        <span class="text-gray-600">Delivery</span>
+                        <span class="text-gray-800">: {{ $data->delivery_estimation }}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <!-- Right Column -->
+                    <div class="grid grid-cols-[6rem_1fr] row-span-2 items-start">
+                        <span class="text-gray-600">Grand Total</span>
+                        <span class="text-gray-800">: Rp. {{ number_format($totalPrice, 0, ',', '.') }} </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-lg p-4">MediSains</div>
+        <div class="text-sm p-4">Signature ????</div>
+        <div class="grid grid-rows-2 items-start p-4">
+            <span class="text-sm text-gray-800">Ini Siapa ?</span>
+            <span class="text-sm text-gray-800">Ini Nomor Siapa ?</span>
+        </div>
+
+    </div>
+</div>
             <button id="generate-pdf" onclick="downloadPDF()"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:text-gray-500">Generate
                 PDF</button>
@@ -1169,7 +1171,7 @@
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][sorting]" value="${product.sorting ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" pattern="[0-9]+"
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][quantity]" value="${product.quantity ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
-                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" pattern="[0-9]+"
+                    <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" id="discount-${index}"
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][discount]" value="${product.discount ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
                     <td class="px-6 py-2 text-gray-900 dark:text-gray-200"><input type="text" pattern="[0-9]+"
                                     title="Masukan Dengan Format Yang Sesuai" name="products[${index}][price_offer]" value="${product.price_offer ?? 0}" class="border rounded p-2 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200" /></td>
@@ -1178,6 +1180,7 @@
 
                 // Append the new row to the table body
                 tableBody.appendChild(row);
+                document.getElementById(`discount-${index}`).setAttribute("pattern", "^\\d+(\\.\\d{1,2})?$");
             });
         }
 

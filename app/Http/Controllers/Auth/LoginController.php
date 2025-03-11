@@ -22,9 +22,9 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             return redirect()->route('home');
         }
-        Log::warning("Login failed for email: " . $credentials['email']);
+        // Log::warning("Login failed for email: " . $credentials['email']);
         return back()->withErrors([
-            'email' => 'Wrong Email or Password',
+            'email' => 'Wrong Username or Password',
         ]);
     }
 

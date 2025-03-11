@@ -6,6 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="base-url" content="{{ url('/') }}">
     <title>{{ config('app.name', 'Medisains') }}</title>
     <!-- Add CSS and other meta tags here -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">

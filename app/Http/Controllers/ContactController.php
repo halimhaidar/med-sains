@@ -9,15 +9,15 @@ use App\Models\DataArea;
 use App\Models\Salutations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\QueryException;
+use Exception;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -53,11 +53,7 @@ class ContactController extends Controller
         return view('contacts.index', compact('contacts', 'companies', 'salutations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $companies = Company::all();
@@ -65,15 +61,10 @@ class ContactController extends Controller
         return view('contacts.create', compact('companies'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
             $request->validate([
                 'name' => 'required|string|max:50',
                 'email' => 'required|email|unique:contacts,email',
@@ -99,34 +90,33 @@ class ContactController extends Controller
             $data_address['address'] = $contact_data->address;
             $data_address['default'] = 1;
             $cekaddress = ContactAddress::create($data_address);
-        } catch (\Throwable $th) {
+            DB::commit();
             return redirect()->route('contacts.index')
-                ->with('error', 'An error occurred while creating the contact.');
-        }
-
-
-        return redirect()->route('contacts.index')
             ->with('success', 'Contact created successfully.');
+        } catch (ValidationException $e) {
+            // Rollback transaction on validation failure
+            DB::rollBack();
+            return redirect()->route('contacts.index')->with('error', json_encode($e->errors()));
+    
+        } catch (QueryException $e) {
+            // Rollback transaction on database failure
+            DB::rollBack();
+            return redirect()->route('contacts.index')->with('error', $e->errorInfo[2]);
+    
+        } catch (Exception $e) {
+            // Rollback transaction on any unexpected failure
+            DB::rollBack();
+            return redirect()->route('contacts.index')->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         $contact = Contact::findOrFail($id);
         return view('contacts.show', compact('contact'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $contact = Contact::findOrFail($id);
@@ -134,13 +124,6 @@ class ContactController extends Controller
         return view('contacts.edit', compact('contact', 'companies'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $contact = Contact::findOrFail($id);
@@ -170,12 +153,6 @@ class ContactController extends Controller
             ->with('success', 'Contact updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Contact $contact)
     {
         $contact->delete();
