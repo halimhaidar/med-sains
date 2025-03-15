@@ -10,8 +10,8 @@
         </div>
     @endif
     @if (session('error'))
-        <div id="successMessage"
-            class="bg-red-400 border border-red-400 text-black dark:text-white px-4 py-3 rounded-lg mb-5" role="alert">
+        <div id="successMessage" class="bg-red-400 border border-red-400 text-black dark:text-white px-4 py-3 rounded-lg mb-5"
+            role="alert">
             <strong class="font-bold">Error!</strong>
             <span class="block sm:inline">{{ session('error') }}</span>
         </div>
@@ -262,8 +262,7 @@
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Academic
                                 Degree</label>
                             <input type="text" name="academic_degree" id="academic_degree"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         </div>
                         <div class="col-span-2 ">
                             <label for="job_title"
@@ -283,18 +282,55 @@
                             </select>
                         </div>
                         <div class="col-span-2 ">
-                            <label for="company_id"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
-                            <select id="company_id" name="company_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected disabled>Select Company</option>
-                                @foreach ($companies as $company)
-                                    <option value="{{ $company->id }}">
-                                        {{ $company->company }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="relative">
+                                <label for="company-select"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
+                                <button id="dropdown-button" type="button"
+                                    class="bg-white relative w-full border border-gray-300 shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1  sm:text-sm
+                                     text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <span id="selected-value" class="block truncate">Select Company</span>
+                                    <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                <input type="hidden" name="company_id" id="company_id" value="">
+
+                                <div id="dropdown-menu"
+                                    class="hidden absolute z-10 mt-1 w-full bg-white shadow-lg max-h-64 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                    <div class="sticky top-0 z-10 bg-white p-2">
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <input id="search-input" type="text"
+                                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                placeholder="Search companies...">
+                                        </div>
+                                    </div>
+
+                                    <div id="dropdown-items" class="max-h-56 overflow-y-auto py-1">
+
+                                        @foreach ($companies as $company)
+                                            <div class="dropdown-item cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
+                                                data-value="{{ $company->id }}">{{ $company->company }}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="col-span-2 ">
                             <label for="email"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -348,7 +384,7 @@
                                 <option selected disabled>Select Segment</option>
                                 <option value="hospital">Hospital</option>
                                 <option value="industry">Industry</option>
-                                <option value="education">Education</option>
+                                <option value="education">Academic</option>
                             </select>
                         </div>
                         <div class="col-span-2 ">
@@ -361,6 +397,8 @@
                                 <option value="chemical">Chemical</option>
                                 <option value="biological">Biological</option>
                                 <option value="">Select Sub-Segment</option>
+                                <option value="clinic">Clinic</option>
+                                <option value="lab service">Lab Service</option>
                             </select>
                         </div>
                         <input type="hidden" name="sub_segment" id="sub_segment_hidden">
@@ -384,19 +422,19 @@
     <script>
         $(document).ready(function() {
             var baseUrl = $('meta[name="base-url"]').attr('content');
-
             $('#company_id').change(function() {
+                console.log("running ?")
                 var companyId = $(this).val();
-                // console.log('companyid',companyId);
+                // console.log('companyid', companyId);
                 if (companyId) {
                     $.get(baseUrl + '/get-company-data/' + companyId, function(data) {
-                        $('#province').val(data.area.province_name);
-                        $('#city').val(data.area.city_name);
-                        $('#district').val(data.area.district_name);
-                        $('#subdistrict').val(data.area.subdistrict_name);
-                        $('#post_code').val(data.post_code);
-                        $('#address').val(data.address);
-
+                        let area = data.area || {};
+                        $('#province').val(area.province_name ?? "");
+                        $('#city').val(area.city_name ?? "");
+                        $('#district').val(area.district_name ?? "");
+                        $('#subdistrict').val(area.subdistrict_name ?? "");
+                        $('#post_code').val(data.post_code ?? "");
+                        $('#address').val(data.address ?? "");
                     });
                 } else {
                     $('#province').val('');
@@ -407,6 +445,81 @@
                     $('#address').val('');
 
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownButton = document.getElementById('dropdown-button');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            const searchInput = document.getElementById('search-input');
+            const selectedValue = document.getElementById('selected-value');
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            const companyIdInput = document.getElementById('company_id');
+
+            // Toggle dropdown
+            dropdownButton.addEventListener('click', function() {
+                const isHidden = dropdownMenu.classList.contains('hidden');
+                dropdownMenu.classList.toggle('hidden', !isHidden);
+                if (isHidden) {
+                    searchInput.focus();
+                    searchInput.value = '';
+                    filterItems('');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                filterItems(this.value.toLowerCase());
+            });
+
+            function filterItems(searchTerm) {
+                dropdownItems.forEach(function(item) {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Select item
+            dropdownItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    selectedValue.textContent = this.textContent;
+                    const value = this.dataset.value;
+
+                    companyIdInput.value = value;
+
+                    const event = new Event('change');
+                    companyIdInput.dispatchEvent(event);
+
+                    // Remove selected state from all items
+                    dropdownItems.forEach(i => i.classList.remove('bg-blue-100', 'text-blue-900'));
+
+                    // Add selected state to current item
+                    this.classList.add('bg-blue-100', 'text-blue-900');
+
+                    // Hide dropdown
+                    dropdownMenu.classList.add('hidden');
+
+                    // Reset search
+                    searchInput.value = '';
+                    filterItems('');
+                });
+            });
+
+            // Prevent dropdown closing when clicking on search input
+            searchInput.addEventListener('click', function(event) {
+                event.stopPropagation();
             });
         });
     </script>
